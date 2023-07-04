@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <meta name="description" content="Control to select features by attributes	." />
+    <meta name="keywords" content="ol, overlay, popup, vector, feature, attribute" />
+
+    <title>Document</title>
+    <!-- OpenLayers CSS -->
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+    <!-- Openlayers -->
+    <link rel="stylesheet" href="node_modules/ol/ol.css" />
+    <script type="text/javascript" src="node_modules/ol/dist/ol.js"></script>
+    <script
+        src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL,Object.assign"></script>
+
+    <!-- ol-ext -->
+    <link rel="stylesheet" href="node_modules/ol-ext/dist/ol-ext.css" />
+    <script type="text/javascript" src="node_modules/ol-ext/dist/ol-ext.js"></script>
+    <!-- Pointer events polyfill for old browsers, see https://caniuse.com/#feat=pointer -->
+    <script src="https://unpkg.com/elm-pep@1.0.6/dist/elm-pep.js"></script>
+
+    <link rel="stylesheet" href="CSS/style.css">
+
+    <!-- Custom styles -->
+</head>
+
+<body>
+    <div class="grid-container">
+        <div class="header">
+            <img src="RSC/IMG/arrdel.jpg" alt="" style="width: inherit; height: inherit; vertical-align: middle;">
+            <span style="vertical-align: middle;">BEEMAP - Cartographie Web</span>
+
+        </div>
+        
+
+        <div id="map" style="width:100vw; height:92vh;"></div>
+
+      
+
+    </div>
+    <script type="text/javascript" src="JS/main.js"></script>
+    <script src="RSC/GeoJson/regional.geojson"></script>
+</body>
+
+</html>
