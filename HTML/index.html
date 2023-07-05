@@ -27,10 +27,14 @@
     <!-- ol-ext -->
     <link rel="stylesheet" href="node_modules/ol-ext/dist/ol-ext.css" />
     <script type="text/javascript" src="node_modules/ol-ext/dist/ol-ext.js"></script>
+    <!-- ol-layerswitcher -->
+    <link rel="stylesheet" href="node_modules/ol-layerswitcher/dist/ol-layerswitcher.css" />
+    <script type="text/javascript" src="node_modules/ol-layerswitcher/dist/ol-layerswitcher.js"></script>
     <!-- Pointer events polyfill for old browsers, see https://caniuse.com/#feat=pointer -->
     <script src="https://unpkg.com/elm-pep@1.0.6/dist/elm-pep.js"></script>
 
     <link rel="stylesheet" href="CSS/style.css">
+    <link rel="stylesheet" href="CSS/ol-sidebar.css">
 
     <!-- Custom styles -->
 </head>
@@ -42,14 +46,74 @@
             <span style="vertical-align: middle;">BEEMAP - Cartographie Web</span>
 
         </div>
-        
 
-        <div id="map" style="width:100vw; height:92vh;"></div>
+        <!-- START OF SIDEBAR DIV -->
+        <div id="sidebar" class="sidebar collapsed">
+            <!-- Nav tabs -->
+            <div class="sidebar-tabs">
+                <ul role="tablist">
+                    <li>
+                        <a href="#home" role="tab"><i class="fa fa-bars"></i></a>
+                    </li>
+                    <li>
+                        <a href="#profile" role="tab"><i class="fa fa-user"></i></a>
+                    </li>
+                    <li class="disabled">
+                        <a href="#messages" role="tab"><i class="fa fa-envelope"></i></a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/Turbo87/sidebar-v2" role="tab" target="_blank"><i
+                                class="fa fa-github"></i></a>
+                    </li>
+                </ul>
 
-      
+                <ul role="tablist">
+                    <li>
+                        <a href="#settings" role="tab"><i class="fa fa-gear"></i></a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Tab panes -->
+            <div class="sidebar-content">
+                <div class="sidebar-pane" id="home">
+                    <h1 class="sidebar-header">
+                        Layers
+                        <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                    </h1>
+                    <!-- !!! HERE WILL GO THE CONTENT OF LAYERSWITCHER !!! -->
+                    <div id="layers" class="layer-switcher"></div>
+                </div>
+
+                <div class="sidebar-pane" id="profile">
+                    <h1 class="sidebar-header">
+                        Profile<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                    </h1>
+                </div>
+
+                <div class="sidebar-pane" id="messages">
+                    <h1 class="sidebar-header">
+                        Messages<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                    </h1>
+                </div>
+
+                <div class="sidebar-pane" id="settings">
+                    <h1 class="sidebar-header">
+                        Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <!-- END OF SIDEBAR DIV -->
+
+
+        <div id="map" class="sidebar-map"></div>
+
+
 
     </div>
     <script type="text/javascript" src="JS/main.js"></script>
+    <script type="text/javascript" src="JS/ol-sidebar.js"></script>
     <script src="RSC/GeoJson/regional.geojson"></script>
 </body>
 

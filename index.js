@@ -28,6 +28,8 @@ app.use("/node_modules/ol-ext/dist", express.static(__dirname + "/node_modules/o
 
 app.use("/node_modules/ol/dist", express.static(__dirname + "/node_modules/ol/dist/"))
 
+app.use("/node_modules/ol-layerswitcher/dist", express.static(__dirname + "/node_modules/ol-layerswitcher/dist/"))
+
 app.use("/node_modules/ol", express.static(__dirname + "/node_modules/ol/"))
 
 
