@@ -1,4 +1,4 @@
-body {
+html, body {
   overflow: hidden;
   height: 100%;
   padding: 0;
@@ -9,9 +9,11 @@ body {
   font: 10pt 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
-html, body, #map {
+#map {
   width: 100vw;
   height: 92vh;
+  display: block;
+  position: relative;
   font: 10pt 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 

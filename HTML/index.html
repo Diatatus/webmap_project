@@ -13,10 +13,13 @@
     <title>Document</title>
     <!-- OpenLayers CSS -->
     <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+    
+    <!-- Bingmap -->
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R'></script>
 
     <!-- Openlayers -->
     <link rel="stylesheet" href="node_modules/ol/ol.css" />
@@ -29,12 +32,14 @@
     <script type="text/javascript" src="node_modules/ol-ext/dist/ol-ext.js"></script>
     <!-- ol-layerswitcher -->
     <link rel="stylesheet" href="node_modules/ol-layerswitcher/dist/ol-layerswitcher.css" />
-    <script type="text/javascript" src="node_modules/ol-layerswitcher/dist/ol-layerswitcher.js"></script>
+    <!-- ol-sidebar -->
+    <link rel="stylesheet" href="node_modules/ol-sidebar/ol-sidebar.css" />
+    <script type="text/javascript" src="node_modules/ol-sidebar/ol-sidebar.js"></script>
     <!-- Pointer events polyfill for old browsers, see https://caniuse.com/#feat=pointer -->
     <script src="https://unpkg.com/elm-pep@1.0.6/dist/elm-pep.js"></script>
 
     <link rel="stylesheet" href="CSS/style.css">
-    <link rel="stylesheet" href="CSS/ol-sidebar.css">
+   
 
     <!-- Custom styles -->
 </head>
@@ -53,10 +58,10 @@
             <div class="sidebar-tabs">
                 <ul role="tablist">
                     <li>
-                        <a href="#home" role="tab"><i class="fa fa-bars"></i></a>
+                        <a href="#home" role="tab"><i class="fa-solid fa-map"></i></a>
                     </li>
                     <li>
-                        <a href="#profile" role="tab"><i class="fa fa-user"></i></a>
+                        <a href="#profile" role="tab"><i class="fa-solid fa-database"></i></a>
                     </li>
                     <li class="disabled">
                         <a href="#messages" role="tab"><i class="fa fa-envelope"></i></a>
@@ -78,7 +83,7 @@
             <div class="sidebar-content">
                 <div class="sidebar-pane" id="home">
                     <h1 class="sidebar-header">
-                        Layers
+                        COUCHES
                         <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                     </h1>
                     <!-- !!! HERE WILL GO THE CONTENT OF LAYERSWITCHER !!! -->
@@ -87,7 +92,7 @@
 
                 <div class="sidebar-pane" id="profile">
                     <h1 class="sidebar-header">
-                        Profile<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                        DONNEES THEMATIQUES<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                     </h1>
                 </div>
 
@@ -113,8 +118,7 @@
 
     </div>
     <script type="text/javascript" src="JS/main.js"></script>
-    <script type="text/javascript" src="JS/ol-sidebar.js"></script>
-    <script src="RSC/GeoJson/regional.geojson"></script>
+    <script src="RSC/GeoJson/region.js"></script>
 </body>
 
 </html>
