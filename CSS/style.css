@@ -8,6 +8,18 @@ html, body {
   overflow: hidden;
   font: 10pt 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
+main{
+  display: grid;
+  grid-template-areas: 
+  "head head head"
+  "content content content"
+  "foot foot foot";
+  grid-template-rows: 45px auto 20px;
+}
+
+header{grid-area: head;}
+article{grid-area: content;}
+footer{grid-area: foot;}
 
 #map {
   width: 100vw;
@@ -52,4 +64,39 @@ html, body {
     position: initial;
   }
 
-  
+  		.leftside {
+			margin-top: 50px;
+			margin-left:50px;
+		}
+		
+		.labelexpanded {
+			font-size: 12px;
+		}
+		
+		.labelexpanded > input {
+			display:none;
+		}
+		
+		.labelexpanded input:checked + .radio-btns {
+				background-color: #253c6a;
+				color: #fff;
+		}
+		
+		.radio-btns {
+			width: 57px;
+			height: 59px;
+			border-radius: 15px;
+			position: relative;
+			text-align: center;
+			padding: 15px 20px;
+			box-shadow: 0 1px #c3c3c3;
+			cursor: pointer;
+			background-color: #eaeaea;
+			float:left;
+			margin-right: 15px;
+		}
+		
+		.radio-btns > img {
+			width: 28px;
+			height: 30px;
+		}

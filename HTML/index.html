@@ -17,9 +17,10 @@
 
     <!-- jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
-    
+
     <!-- Bingmap -->
-    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R'></script>
+    <script type='text/javascript'
+        src='https://www.bing.com/api/maps/mapcontrol?key=AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R'></script>
 
     <!-- Openlayers -->
     <link rel="stylesheet" href="node_modules/ol/ol.css" />
@@ -39,84 +40,120 @@
     <script src="https://unpkg.com/elm-pep@1.0.6/dist/elm-pep.js"></script>
 
     <link rel="stylesheet" href="CSS/style.css">
-   
+
 
     <!-- Custom styles -->
 </head>
 
 <body>
-    <div class="grid-container">
-        <div class="header">
-            <img src="RSC/IMG/arrdel.jpg" alt="" style="width: inherit; height: inherit; vertical-align: middle;">
-            <span style="vertical-align: middle;">BEEMAP - Cartographie Web</span>
+    <main>
+        <header>
+            <div class="header">
+                <img src="RSC/IMG/arrdel.jpg" alt="" style="width: inherit; height: inherit; vertical-align: middle;">
+                <span style="vertical-align: middle;">BEEMAP - Cartographie Web</span>
 
-        </div>
-
-        <!-- START OF SIDEBAR DIV -->
-        <div id="sidebar" class="sidebar collapsed">
-            <!-- Nav tabs -->
-            <div class="sidebar-tabs">
-                <ul role="tablist">
-                    <li>
-                        <a href="#home" role="tab"><i class="fa-solid fa-map"></i></a>
-                    </li>
-                    <li>
-                        <a href="#profile" role="tab"><i class="fa-solid fa-database"></i></a>
-                    </li>
-                    <li class="disabled">
-                        <a href="#messages" role="tab"><i class="fa fa-envelope"></i></a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/Turbo87/sidebar-v2" role="tab" target="_blank"><i
-                                class="fa fa-github"></i></a>
-                    </li>
-                </ul>
-
-                <ul role="tablist">
-                    <li>
-                        <a href="#settings" role="tab"><i class="fa fa-gear"></i></a>
-                    </li>
-                </ul>
             </div>
+        </header>
+        <article>
 
-            <!-- Tab panes -->
-            <div class="sidebar-content">
-                <div class="sidebar-pane" id="home">
-                    <h1 class="sidebar-header">
-                        COUCHES
-                        <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                    </h1>
-                    <!-- !!! HERE WILL GO THE CONTENT OF LAYERSWITCHER !!! -->
-                    <div id="layers" class="layer-switcher"></div>
+            
+            <!-- START OF SIDEBAR DIV -->
+            <div id="sidebar" class="sidebar collapsed">
+                <!-- Nav tabs -->
+                <div class="sidebar-tabs">
+                    <ul role="tablist">
+                        <li>
+                            <a href="#home" role="tab"><i class="fa-solid fa-map"></i></a>
+                        </li>
+                        <li>
+                            <a href="#profile" role="tab"><i class="fa-solid fa-database"></i></a>
+                        </li>
+                        <li class="disabled">
+                            <a href="#messages" role="tab"><i class="fa fa-envelope"></i></a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/Turbo87/sidebar-v2" role="tab" target="_blank"><i
+                                    class="fa fa-github"></i></a>
+                        </li>
+                    </ul>
+
+                    <ul role="tablist">
+                        <li>
+                            <a href="#settings" role="tab"><i class="fa fa-gear"></i></a>
+                        </li>
+                    </ul>
                 </div>
 
-                <div class="sidebar-pane" id="profile">
-                    <h1 class="sidebar-header">
-                        DONNEES THEMATIQUES<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                    </h1>
-                </div>
+                <!-- Tab panes -->
+                <div class="sidebar-content">
+                    <div class="sidebar-pane" id="home">
+                        <h1 class="sidebar-header">
+                            COUCHES
+                            <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                        </h1>
+                        <!-- !!! HERE WILL GO THE CONTENT OF LAYERSWITCHER !!! -->
+                        <div id="layers" class="layer-switcher">
 
-                <div class="sidebar-pane" id="messages">
-                    <h1 class="sidebar-header">
-                        Messages<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                    </h1>
-                </div>
+                              <div  class="leftside">
+                                <label  class="labelexpanded"> 
+                                    <input  id="layer-select" type="radio"  name="targetgroup" value="Aerial" onchange="onchange()" > 
+                                        <div  class="radio-btns"> 
+                                            <img src="RSC/IMG/Aerial.png"/> 
+                                            <p> Aerial </p> 
+                                        </div>
+                                    </input>
+                                </label>
+                                
+                                
+                                <label class="labelexpanded"> 
+                                    <input  id="layer-select" type="radio"  name="targetgroup" value="AerialWithLabelsOnDemand" onchange="onchange()"> <div class="radio-btns"> <img src="RSC/IMG/Aerial with labels.png"> <p> Aerial with labels </p> </div> 
+                                </label>
+                                
+                                <label class="labelexpanded">
+                                    <input  id="layer-select" type="radio"  name="targetgroup" value="RoadOnDemand" onchange="onchange()" > <div class="radio-btns"> <img src="RSC/IMG/Road.png"> <p> Road </p> </div> 
+                                </label>
+                                
+                                <label class="labelexpanded"> 
+                                    <input  id="layer-select" type="radio"  name="targetgroup" value="CanvasDark" onchange="onchange()"> <div class="radio-btns"> <img src="RSC/IMG/Road dark.png"> <p> Road dark </p> </div> 
+                                </label>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="sidebar-pane" id="settings">
-                    <h1 class="sidebar-header">
-                        Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                    </h1>
+                    <div class="sidebar-pane" id="profile">
+                        <h1 class="sidebar-header">
+                            DONNEES THEMATIQUES<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                        </h1>
+                    </div>
+
+                    <div class="sidebar-pane" id="messages">
+                        <h1 class="sidebar-header">
+                            Messages<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                        </h1>
+                    </div>
+
+                    <div class="sidebar-pane" id="settings">
+                        <h1 class="sidebar-header">
+                            Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                        </h1>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- END OF SIDEBAR DIV -->
+            <!-- END OF SIDEBAR DIV -->
+
+            <div id="map" class="sidebar-map"></div>
+        </article>
+
+        <footer></footer>
+    </main>
 
 
-        <div id="map" class="sidebar-map"></div>
 
 
 
-    </div>
+
+
+
     <script type="text/javascript" src="JS/main.js"></script>
     <script src="RSC/GeoJson/region.js"></script>
 </body>
