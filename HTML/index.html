@@ -14,7 +14,6 @@
     <!-- OpenLayers CSS -->
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <!-- jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
 
@@ -92,11 +91,13 @@
                             <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                         </h1>
                         <!-- !!! HERE WILL GO THE CONTENT OF LAYERSWITCHER !!! -->
-                        <div id="layers" class="layer-switcher">
-
-                              <div  class="leftside">
-                                <label  class="labelexpanded"> 
-                                    <input  id="layer-select" type="radio"  name="targetgroup" value="Aerial" onchange="onchange()" > 
+                        <div  class="layer-switcher">
+                            <h3><i class="fa-solid fa-layer-group"></i>  Fonds de cartes</h3>
+                            <div  class="leftside" >
+                                
+                                <label  class="labelexpanded">
+                                    
+                                    <input   type="radio"   name="targetgroup" value="Aerial" checked  onchange="toggleLayer(event);"> 
                                         <div  class="radio-btns"> 
                                             <img src="RSC/IMG/Aerial.png"/> 
                                             <p> Aerial </p> 
@@ -106,18 +107,37 @@
                                 
                                 
                                 <label class="labelexpanded"> 
-                                    <input  id="layer-select" type="radio"  name="targetgroup" value="AerialWithLabelsOnDemand" onchange="onchange()"> <div class="radio-btns"> <img src="RSC/IMG/Aerial with labels.png"> <p> Aerial with labels </p> </div> 
+                                    <input   type="radio"    name="targetgroup" value="Aerial with labels"  onchange="toggleLayer(event);"> <div class="radio-btns"> <img src="RSC/IMG/Aerial with labels.png"> <p> Aerial with labels </p> </div> 
                                 </label>
                                 
                                 <label class="labelexpanded">
-                                    <input  id="layer-select" type="radio"  name="targetgroup" value="RoadOnDemand" onchange="onchange()" > <div class="radio-btns"> <img src="RSC/IMG/Road.png"> <p> Road </p> </div> 
+                                    <input   type="radio"    name="targetgroup" value="Road"   onchange="toggleLayer(event);"> <div class="radio-btns"> <img src="RSC/IMG/Road.png"> <p> Road </p> </div> 
                                 </label>
                                 
                                 <label class="labelexpanded"> 
-                                    <input  id="layer-select" type="radio"  name="targetgroup" value="CanvasDark" onchange="onchange()"> <div class="radio-btns"> <img src="RSC/IMG/Road dark.png"> <p> Road dark </p> </div> 
+                                    <input   type="radio"  name="targetgroup" value="Canvas Dark"  onchange="toggleLayer(event);"> <div class="radio-btns"> <img src="RSC/IMG/Road dark.png"> <p> Road dark </p> </div> 
                                 </label>
-                            </div>
-                        </div>
+                      </div>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+        
+                       <h3><i class="fa-solid fa-minus"></i> Limtites Administratives</h3> 
+                    </div>
+                        
                     </div>
 
                     <div class="sidebar-pane" id="profile">

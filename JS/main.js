@@ -1,28 +1,49 @@
 // Base map
 
-const styles = [
-  'RoadOnDemand',
-  'Aerial',
-  'AerialWithLabelsOnDemand',
-  'CanvasDark',
-];
-const layers = [];
-let i, ii;
-for (i = 0, ii = styles.length; i < ii; ++i) {
-  layers.push(
-    new ol.layer.Tile({
-      visible: true,
-      preload: Infinity,
-      source: new ol.source.BingMaps({
-        key: 'AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R',
-        imagerySet: styles[i],
-        // use maxZoom 19 to see stretched tiles instead of the BingMaps
-        // "no photos at this zoom level" tiles
-        // maxZoom: 19
-      }),
-    })
-  );
-}
+var bingMapsAerial = new ol.layer.Tile({
+  title: 'Aerial',
+  visible: true,
+  type: 'base',
+  preload: Infinity,
+  source: new ol.source.BingMaps({
+    key: 'AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R',
+    imagerySet: 'Aerial',
+  })
+});
+
+var bingMapsAerialWithLabelsOnDemand = new ol.layer.Tile({
+  title: 'Aerial with labels',
+  visible: false,
+  type: 'base',
+  preload: Infinity,
+  source: new ol.source.BingMaps({
+    key: 'AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R',
+    imagerySet: 'AerialWithLabelsOnDemand',
+  })
+});
+
+var bingMapsRoadOnDemand = new ol.layer.Tile({
+  title:'Road',
+  visible: false,
+  type: 'base',
+  preload: Infinity,
+  source: new ol.source.BingMaps({
+    key: 'AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R',
+    imagerySet: 'RoadOnDemand',
+  })
+});
+
+var bingMapsCanvasDark = new ol.layer.Tile({
+  title: "Canvas Dark",
+  visible: false,
+  type: 'base',
+  preload: Infinity,
+  source: new ol.source.BingMaps({
+    key: 'AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R',
+    imagerySet: 'CanvasDark',
+  })
+});
+
 
 
 // The map
@@ -32,19 +53,25 @@ var map = new ol.Map({
     center: ol.proj.fromLonLat([12.744686, 6.434886]),
     zoom: 6,
   }),
-  layers: layers
+  layers: [bingMapsAerial,bingMapsAerialWithLabelsOnDemand,bingMapsRoadOnDemand,bingMapsCanvasDark],
 });
 
 
-const Select = document.getElementById('layer-select');
-function onChange() {
-  const style = Select.value;
-  for (let i = 0, ii = layers.length; i < ii; ++i) {
-    layers[i].setVisible(styles[i] === style);
-  }
+function toggleLayer(eve){
+  var lyrname = eve.target.value;
+  var checkedStatus = eve.target.checked;
+  var lyrList = map.getLayers();
+
+  lyrList.forEach(function(element){
+      if (lyrname == element.get('title')){
+          element.setVisible(checkedStatus);
+      }else{
+        element.setVisible(false);
+      }
+  });
 }
-Select.addEventListener('change', onChange);
-onChange();
+
+
 
 // GeoJSON layer
 var vectorSource = new ol.source.Vector({
@@ -53,15 +80,6 @@ var vectorSource = new ol.source.Vector({
 
 });
 
-var Cameroun_Regions = new ol.layer.Tile({
-  title: 'Cameroun_Regions',
-  source: new ol.source.TileWMS({
-    url: 'http://localhost:8080/geoserver/beesig_w/wms',
-    params: { 'LAYERS': 'beesig_w:region', 'TILED': true },
-    serverType: 'geoserver',
-    visible: true,
-  })
-});
 
 map.addLayer(new ol.layer.Vector({
   name: 'Regions',
@@ -152,9 +170,6 @@ var popup = new ol.Overlay.PopupFeature({
 });
 map.addOverlay(popup);
 
-
-
-
 var sidebar = new ol.control.Sidebar({
   element: 'sidebar',
   position: 'left'
@@ -175,4 +190,5 @@ function setDiagonal(val) {
 }
 map.addControl(ctrl);
 map.addControl(new ol.control.ScaleLine());
+
 
