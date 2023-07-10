@@ -71,6 +71,20 @@ function toggleLayer(eve){
   });
 }
 
+function bindInputs(layerid, layer) {
+  const visibilityInput = $(layerid + ' input.visible');
+  visibilityInput.on('change', function () {
+    layer.setVisible(this.checked);
+  });
+  visibilityInput.prop('checked', layer.getVisible());
+
+  const opacityInput = $(layerid + ' input.opacity');
+  opacityInput.on('input change', function () {
+    layer.setOpacity(parseFloat(this.value));
+  });
+  opacityInput.val(String(layer.getOpacity()));
+}
+
 
 
 // GeoJSON layer

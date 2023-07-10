@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/3.18.3/minified.js"></script>
 
     <!-- Bingmap -->
     <script type='text/javascript'
@@ -93,7 +94,7 @@
                         <!-- !!! HERE WILL GO THE CONTENT OF LAYERSWITCHER !!! -->
                         <div  class="layer-switcher">
                             <h3><i class="fa-solid fa-layer-group"></i>  Fonds de cartes</h3>
-                            <div  class="leftside" >
+                            <div id="layers" class="leftside" >
                                 
                                 <label  class="labelexpanded">
                                     
@@ -107,7 +108,7 @@
                                 
                                 
                                 <label class="labelexpanded"> 
-                                    <input   type="radio"    name="targetgroup" value="Aerial with labels"  onchange="toggleLayer(event);"> <div class="radio-btns"> <img src="RSC/IMG/Aerial with labels.png"> <p> Aerial with labels </p> </div> 
+                                    <input   type="radio"     name="targetgroup" value="Aerial with labels"  onchange="toggleLayer(event);"> <div class="radio-btns"> <img src="RSC/IMG/Aerial with labels.png"> <p> Aerial with labels </p> </div> 
                                 </label>
                                 
                                 <label class="labelexpanded">
@@ -117,25 +118,42 @@
                                 <label class="labelexpanded"> 
                                     <input   type="radio"  name="targetgroup" value="Canvas Dark"  onchange="toggleLayer(event);"> <div class="radio-btns"> <img src="RSC/IMG/Road dark.png"> <p> Road dark </p> </div> 
                                 </label>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+
+
+                                <label>
+                                    Opacité <input class="opacity" type="range" min="0" max="1" step="0.01"/>
+                                </label>
                       </div>
                       <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-        
-                       <h3><i class="fa-solid fa-minus"></i> Limtites Administratives</h3> 
+
+                       <h3><i class="fa-solid fa-minus"></i> Limtites Administratives</h3>
+                       
+                       <div class="cntr" id="cntr">
+                        <div class="cntr-innr">
+                          <label class="search" for="inpt_search">
+                                <input id="inpt_search" type="text" />
+                            </label>
+                        </div>
+                        <div class="liveDataDiv" id="liveDataDiv"></div>
+                    </div>
+                    </form>
+                      
                     </div>
                         
                     </div>
