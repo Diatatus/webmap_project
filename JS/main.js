@@ -1,3 +1,14 @@
+var serverPort = 'localhost:8080';
+var geoserverWorkspace = 'beesig_w';
+var regions = 'region';
+var departements = 'departement';
+var communes = 'commune';
+var identifyLayers = [];
+var projectionName = 'EPSG:4326';
+var layerList = [];
+
+var geojson;
+
 // Base map
 
 var bingMapsAerial = new ol.layer.Tile({
@@ -85,10 +96,49 @@ function bindInputs(layerid, layer) {
   opacityInput.val(String(layer.getOpacity()));
 }
 
+// Geoserver layer
+var Regions_CM = new ol.layer.Image({
+  title: "Regions",
+  source: new ol.source.ImageWMS({
+      url: 'http://' + serverPort + '/geoserver/' + geoserverWorkspace + '/wms',
+      params: { 'LAYERS': geoserverWorkspace + ':' + regions, 'TILED': true },
+      serverType: 'geoserver',
+      visible: true
+  })
+});
 
+var Departements_CM = new ol.layer.Image({
+  title: "Departement",
+  source: new ol.source.ImageWMS({
+      url: 'http://' + serverPort + '/geoserver/' + geoserverWorkspace + '/wms',
+      params: { 'LAYERS': geoserverWorkspace + ':' + departements, 'TILED': true },
+      serverType: 'geoserver',
+      visible: true
+  })
+});
+
+var Communes_CM = new ol.layer.Image({
+  title: "Communes",
+  source: new ol.source.ImageWMS({
+      url: 'http://' + serverPort + '/geoserver/' + geoserverWorkspace + '/wms',
+      params: { 'LAYERS': geoserverWorkspace + ':' + communes, 'TILED': true },
+      serverType: 'geoserver',
+      visible: true
+  })
+});
+
+var overlayGroup = new ol.layer.Group({
+  title: 'Cameroun',
+  fold: true,
+  // layers: [indiaBldTile, indiaWbTile, indiaRdTile, indiaCtTile, indiaDsTile, indiaStTile]
+  layers: [Regions_CM,Departements_CM,Communes_CM]
+})
+
+map.addLayer(overlayGroup);
 
 // GeoJSON layer
 var vectorSource = new ol.source.Vector({
+ 
   url: 'RSC/GeoJson/regional.geojson',
   format: new ol.format.GeoJSON(),
 
@@ -96,6 +146,7 @@ var vectorSource = new ol.source.Vector({
 
 
 map.addLayer(new ol.layer.Vector({
+  visible:false,
   name: 'Regions',
   source: vectorSource,
   style: function (f) {
@@ -205,4 +256,124 @@ function setDiagonal(val) {
 map.addControl(ctrl);
 map.addControl(new ol.control.ScaleLine());
 
+// start : live search function
 
+var txtVal = "";
+var inputBox = document.getElementById('inpt_search');
+inputBox.onkeyup = function () {
+    var newVal = this.value.trim();
+    if (newVal == txtVal) {
+    } else {
+        txtVal = this.value;
+        txtVal = txtVal.trim();
+        if (txtVal !== "") {
+            if (txtVal.length > 2) {
+                clearResults();
+                createLiveSearchTable();
+
+                $.ajax({
+                    url: 'PHP/fetch.php',
+                    type: 'post',
+                    data: { request: 'liveSearch', searchTxt: txtVal, searchLayer: 'public.'+ regions , searchAttribute: 'nom' },
+                    dataType: 'json',
+                    success: function (response) {
+                        createRows(response, regions);
+                    }
+                });
+
+                $.ajax({
+                    url: 'PHP/fetch.php',
+                    type: 'post',
+                    data: { request: 'liveSearch', searchTxt: txtVal, searchLayer: 'public.'+ departements , searchAttribute: 'nom' },
+                    dataType: 'json',
+                    success: function (response) {
+                        createRows(response, departements);
+                    }
+                });
+
+                $.ajax({
+                  url: 'PHP/fetch.php',
+                  type: 'post',
+                  data: { request: 'liveSearch', searchTxt: txtVal, searchLayer: 'public.'+ communes , searchAttribute: 'nom' },
+                  dataType: 'json',
+                  success: function (response) {
+                      createRows(response, communes);
+                  }
+              });
+
+            } else { clearResults(); }
+
+        } else {
+            clearResults();
+        }
+    }
+}
+
+// var liveDataDivEle = document.createElement('div');
+// liveDataDivEle.className = 'liveDataDiv';
+var liveDataDivEle = document.getElementById('liveDataDiv');
+var searchTable = document.createElement('table');
+
+function createLiveSearchTable() {
+
+    searchTable.setAttribute("class", "assetSearchTableClass");
+    searchTable.setAttribute("id", "assetSearchTableID");
+
+    var tableHeaderRow = document.createElement('tr');
+    var tableHeader1 = document.createElement('th');
+    tableHeader1.innerHTML = "Layer";
+    var tableHeader2 = document.createElement('th');
+    tableHeader2.innerHTML = "Object";
+
+    tableHeaderRow.appendChild(tableHeader1);
+    tableHeaderRow.appendChild(tableHeader2);
+    searchTable.appendChild(tableHeaderRow);
+}
+
+function createRows(data, layerName) {
+    var i = 0;
+    for (var key in data) {
+        var data2 = data[key];
+        var tableRow = document.createElement('tr');
+        var td1 = document.createElement('td');
+        if (i == 0) { td1.innerHTML = layerName; }
+        var td2 = document.createElement('td');
+        for (var key2 in data2) {
+            td2.innerHTML = data2[key2];
+            if (layerName == regions) { td2.setAttribute('onClick', 'zoomToFeature(this,\'' + regions + '\',\'' + key2 + '\')'); }
+            else if (layerName == departements) { td2.setAttribute('onClick', 'zoomToFeature(this,\'' + departements + '\',\'' + key2 + '\')'); }
+            else if (layerName == communes) { td2.setAttribute('onClick', 'zoomToFeature(this,\'' + communes + '\',\'' + key2 + '\')'); }
+            else {  }
+        }
+        tableRow.appendChild(td1);
+        tableRow.appendChild(td2);
+        searchTable.appendChild(tableRow);
+
+        i = i + 1;
+    }
+
+    liveDataDivEle.appendChild(searchTable);
+    var ibControl = new ol.control.Control({
+        element: liveDataDivEle,
+    });
+    map.addControl(ibControl);
+}
+
+function clearResults() {
+    liveDataDivEle.innerHTML = '';
+    searchTable.innerHTML = '';
+    map.removeLayer(queryGeoJSON);
+}
+
+function zoomToFeature(featureName, layerName, attributeName) {
+    map.removeLayer(geojson);
+    var value_layer = layerName;
+    var value_attribute = attributeName;
+    var value_operator = "==";
+    var value_txt = featureName.innerHTML;
+    var url = "http://localhost:8080/geoserver/beesig_w/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + value_layer + "&CQL_FILTER=" + value_attribute + "+" + value_operator + "+'" + value_txt + "'&outputFormat=application/json"
+    // console.log(url);
+    newaddGeoJsonToMap(url);
+}
+
+// end : live search function

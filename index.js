@@ -19,6 +19,8 @@ app.use("/CSS", express.static(__dirname + "/CSS/"))
 
 app.use("/JS", express.static(__dirname + "/JS/"))
 
+app.use("/PHP", express.static(__dirname + "/PHP/"))
+
 app.use("/RSC/IMG", express.static(__dirname + "/RSC/IMG/"))
 
 app.use("/RSC/GeoJson", express.static(__dirname + "/RSC/GeoJson/"))
