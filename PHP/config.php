@@ -1,4 +1,6 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: *");
 
 $host = "127.0.0.1";
 $user = "postgres";

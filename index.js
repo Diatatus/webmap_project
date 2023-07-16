@@ -11,7 +11,6 @@ app.get("/", (__, res) => {
     res.send(indexHtml)
 })
 
-  
 
 
 

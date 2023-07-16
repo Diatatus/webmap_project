@@ -1,5 +1,6 @@
 <?php
 
+
 // include "http://10.96.4.34/TPLGIS/resources/custom/config.php";
 
 $host = "localhost";
@@ -24,6 +25,8 @@ if(isset($_POST['request'])){
 
 // Fetch all records
 if($request == 'liveSearch'){
+  header("Access-Control-Allow-Origin: *");
+  header("Access-Control-Allow-Methods: *");
 
   // $query = "SELECT * FROM public.mspanno WHERE LOWER(fl) LIKE LOWER('%$searchTxt%') ORDER BY fl ASC LIMIT 10";
   $query = "SELECT * FROM $searchLayer WHERE LOWER($searchAttribute) LIKE LOWER('%$searchTxt%') ORDER BY $searchAttribute ASC LIMIT 10";

@@ -8,6 +8,7 @@ var projectionName = 'EPSG:4326';
 var layerList = [];
 
 var geojson;
+var queryGeoJSON;
 
 // Base map
 
@@ -272,7 +273,7 @@ inputBox.onkeyup = function () {
                 createLiveSearchTable();
 
                 $.ajax({
-                    url: 'PHP/fetch.php',
+                    url: 'http://localhost/web_app/fetch.php',
                     type: 'post',
                     data: { request: 'liveSearch', searchTxt: txtVal, searchLayer: 'public.'+ regions , searchAttribute: 'nom' },
                     dataType: 'json',
@@ -282,7 +283,7 @@ inputBox.onkeyup = function () {
                 });
 
                 $.ajax({
-                    url: 'PHP/fetch.php',
+                    url: 'http://localhost/web_app/fetch.php',
                     type: 'post',
                     data: { request: 'liveSearch', searchTxt: txtVal, searchLayer: 'public.'+ departements , searchAttribute: 'nom' },
                     dataType: 'json',
@@ -292,7 +293,7 @@ inputBox.onkeyup = function () {
                 });
 
                 $.ajax({
-                  url: 'PHP/fetch.php',
+                  url: 'http://localhost/web_app/fetch.php',
                   type: 'post',
                   data: { request: 'liveSearch', searchTxt: txtVal, searchLayer: 'public.'+ communes , searchAttribute: 'nom' },
                   dataType: 'json',
