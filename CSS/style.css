@@ -16,7 +16,7 @@ main {
     "head head head"
     "content content content"
     "foot foot foot";
-  grid-template-rows: 45px auto 20px;
+  grid-template-rows: 60px auto 20px;
 }
 
 header {
@@ -33,7 +33,7 @@ footer {
 
 #map {
   width: 100vw;
-  height: 92vh;
+  height: 88vh;
   display: block;
   position: relative;
   font: 10pt 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -42,10 +42,11 @@ footer {
 
 .header {
   grid-area: header;
-  font-size: 25px;
-  height: 50px;
+  font-size: 40px;
+  height: 60px;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
+
 
 
 
@@ -114,15 +115,15 @@ footer {
 
 .search {
 	display: inline-block;
-	position: relative;
+	position: absolute;
   top: 10px;
-  left: 100%;
+  left: 50%;
 	height: 30px;
 	width: 30px;
 	box-sizing: border-box;
 	/* margin: 0px 8px 7px 0px; */
   margin-left: -200px;
-	padding: 7px 9px 0px 9px;
+	padding: 7px 9px 5px 9px;
 	border: 3px solid rgba(60, 116, 189, 0.3);
   background-color: rgba(155, 192, 241, 0.3);
 	border-radius: 25px;
@@ -132,7 +133,7 @@ footer {
 	.search:after {
 		content: "";
 		position: absolute;
-		width: 3px;
+		width: 30px;
 		height: 20px;
 		right: -5px;
 		top: 21px;
@@ -169,7 +170,7 @@ footer {
 
   .liveDataDiv{
   position: fixed;
-  left: 100%;
+  left: 60%;
   top: 45px;
   margin-left: -305px;
   width: 300px;

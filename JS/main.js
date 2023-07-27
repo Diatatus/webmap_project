@@ -10,6 +10,88 @@ var layerList = [];
 var geojson;
 var queryGeoJSON;
 
+var highlightStyle = new ol.style.Style({
+    fill: new ol.style.Fill({
+        color: 'rgba(64,244,208,0.4)',
+    }),
+    stroke: new ol.style.Stroke({
+        color: '#40E0D0',
+        width: 3,
+    }),
+    image: new ol.style.Circle({
+        radius: 10,
+        fill: new ol.style.Fill({
+            color: '#40E0D0'
+        })
+    })
+});
+var featureOverlay = new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    map: map,
+    style: highlightStyle
+});
+
+var querySelectedFeatureStyle = new ol.style.Style({
+    fill: new ol.style.Fill({
+        color: 'rgba(64,244,208,0.4)',
+    }),
+    stroke: new ol.style.Stroke({
+        color: '#40E0D0',
+        width: 3,
+    }),
+    image: new ol.style.Circle({
+        radius: 10,
+        fill: new ol.style.Fill({
+            color: '#40E0D0'
+        })
+    })
+});
+var querySelectedFeatureOverlay = new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    map: map,
+    style: querySelectedFeatureStyle
+});
+
+var clickSelectedFeatureStyle = new ol.style.Style({
+    fill: new ol.style.Fill({
+        color: 'rgba(255,255,0,0.4)',
+    }),
+    stroke: new ol.style.Stroke({
+        color: '#FFFF00',
+        width: 3,
+    }),
+    image: new ol.style.Circle({
+        radius: 10,
+        fill: new ol.style.Fill({
+            color: '#FFFF00'
+        })
+    })
+});
+var clickSelectedFeatureOverlay = new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    map: map,
+    style: clickSelectedFeatureStyle
+});
+var interactionStyle = new ol.style.Style({
+    fill: new ol.style.Fill({
+        color: 'rgba(200, 200, 200, 0.6)',
+    }),
+    stroke: new ol.style.Stroke({
+        color: 'rgba(0, 0, 0, 0.5)',
+        lineDash: [10, 10],
+        width: 2,
+    }),
+    image: new ol.style.Circle({
+        radius: 5,
+        stroke: new ol.style.Stroke({
+            color: 'rgba(0, 0, 0, 0.7)',
+        }),
+        fill: new ol.style.Fill({
+            color: 'rgba(255, 255, 255, 0.2)',
+        }),
+    })
+});
+
 // Base map
 
 var bingMapsAerial = new ol.layer.Tile({
@@ -256,6 +338,32 @@ function setDiagonal(val) {
 }
 map.addControl(ctrl);
 map.addControl(new ol.control.ScaleLine());
+
+function newaddGeoJsonToMap(url) {
+
+  if (queryGeoJSON) {
+      queryGeoJSON.getSource().clear();
+      map.removeLayer(queryGeoJSON);
+  }
+
+  queryGeoJSON = new ol.layer.Vector({
+      source: new ol.source.Vector({
+          url: url,
+          format: new ol.format.GeoJSON()
+      }),
+      style: querySelectedFeatureStyle,
+
+  });
+
+  queryGeoJSON.getSource().on('addfeature', function () {
+      map.getView().fit(
+          queryGeoJSON.getSource().getExtent(),
+          { duration: 1590, size: map.getSize(), maxZoom: 21 }
+      );
+  });
+  map.addLayer(queryGeoJSON);
+};
+
 
 // start : live search function
 
