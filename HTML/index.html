@@ -52,19 +52,21 @@
                 <img src="RSC/IMG/arrdel.jpg" alt="" style="width: inherit; height: inherit; vertical-align: middle;">
 
             </div>
-            <div class="cntr" id="cntr">
-                <div class="cntr-innr">
-                  <label class="search" for="inpt_search">
-                        <input id="inpt_search" type="text" />
-                    </label>
+
+            <div class="wrap">
+                <div class="search1" for="inpt_search">
+                   <input id="inpt_search" type="text" class="searchTerm" placeholder="Chercher un lieu, une adresse, une donnée...">
+                   <button type="submit" class="searchButton">
+                     <i class="fa fa-search"></i>
+                  </button>
+                  <div class="liveDataDiv" id="liveDataDiv"></div>
                 </div>
-                <div class="liveDataDiv" id="liveDataDiv"></div>
-            </div>
+             </div>
         </header>
         <article>
 
-            
-            <!-- START OF SIDEBAR DIV -->
+            <div id="map" class="sidebar-map">
+                            <!-- START OF SIDEBAR DIV -->
             <div id="sidebar" class="sidebar collapsed">
                 <!-- Nav tabs -->
                 <div class="sidebar-tabs">
@@ -176,8 +178,9 @@
                 </div>
             </div>
             <!-- END OF SIDEBAR DIV -->
+            </div>
 
-            <div id="map" class="sidebar-map"></div>
+            
         </article>
 
         <footer></footer>
