@@ -31,6 +31,15 @@ footer {
   grid-area: foot;
 }
 
+#image {
+  background-color: #eee;
+  padding: 1em;
+  clear: both;
+  display: inline-block;
+  margin: 1em 0;
+}
+
+
 #map {
   width: 100vw;
   height: 88vh;
@@ -39,6 +48,27 @@ footer {
   font: 10pt 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
+.info {
+  margin: 0;
+}
+.ol-attribution {
+  bottom: 0;
+  height: 1em;
+}
+.ol-scale-line {
+  right: 0;
+  left: auto;
+  bottom: 2em;
+}
+.ol-control-title {
+  height: 2em;
+}
+.ol-print-compass {
+  top: 1.5em!important;
+}
+.ol-ext-print-dialog label {
+  letter-spacing: -.05em;
+}
 
 .header {
   grid-area: header;

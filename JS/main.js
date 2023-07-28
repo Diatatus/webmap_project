@@ -486,3 +486,46 @@ function zoomToFeature(featureName, layerName, attributeName) {
 }
 
 // end : live search function
+
+// Add a title control
+map.addControl(new ol.control.CanvasTitle({ 
+  title: 'my title', 
+  visible: false,
+  style: new ol.style.Style({ text: new ol.style.Text({ font: '20px "Lucida Grande",Verdana,Geneva,Lucida,Arial,Helvetica,sans-serif'}) })
+}));
+
+// Print control
+var printControl = new ol.control.PrintDialog({ 
+  // target: document.querySelector('.info'),
+  // targetDialog: map.getTargetElement() 
+  // save: false,
+  // copy: false,
+  // pdf: false
+});
+printControl.setSize('A4');
+map.addControl(printControl);
+
+/* On print > save image file */
+printControl.on(['print', 'error'], function(e) {
+  // Print success
+  if (e.image) {
+    if (e.pdf) {
+      // Export pdf using the print info
+      var pdf = new jsPDF({
+        orientation: e.print.orientation,
+        unit: e.print.unit,
+        format: e.print.size
+      });
+      pdf.addImage(e.image, 'JPEG', e.print.position[0], e.print.position[0], e.print.imageWidth, e.print.imageHeight);
+      pdf.save(e.print.legend ? 'legend.pdf' : 'map.pdf');
+    } else  {
+      // Save image as file
+      e.canvas.toBlob(function(blob) {
+        var name = (e.print.legend ? 'legend.' : 'map.')+e.imageType.replace('image/','');
+        saveAs(blob, name);
+      }, e.imageType, e.quality);
+    }
+  } else {
+    console.warn('No canvas to export');
+  }
+});
