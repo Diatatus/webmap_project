@@ -18,10 +18,10 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/3.18.3/minified.js"></script>
 
-      <!-- https://github.com/MrRio/jsPDF -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
-  <!-- filesaver-js -->
-  <script type="text/javascript" src="https://cdn.rawgit.com/eligrey/FileSaver.js/aa9f4e0e/FileSaver.min.js"></script>
+    <!-- https://github.com/MrRio/jsPDF -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+    <!-- filesaver-js -->
+    <script type="text/javascript" src="https://cdn.rawgit.com/eligrey/FileSaver.js/aa9f4e0e/FileSaver.min.js"></script>
 
     <!-- Bingmap -->
     <script type='text/javascript'
@@ -53,139 +53,108 @@
 <body>
     <main>
         <header>
-            <div id="head" class="header" >
+            <div id="head" class="header">
                 <img src="RSC/IMG/arrdel.jpg" alt="" style="width: inherit; height: inherit; vertical-align: middle;">
 
             </div>
 
             <div class="wrap">
                 <div class="search1" for="inpt_search">
-                   <input id="inpt_search" type="text" class="searchTerm" placeholder="Chercher un lieu, une adresse, une donnée...">
-                   <button type="submit" class="searchButton">
-                     <i class="fa fa-search"></i>
-                  </button>
-                  <div class="liveDataDiv" id="liveDataDiv"></div>
+                    <input id="inpt_search" type="text" class="searchTerm"
+                        placeholder="Chercher un lieu, une adresse, une donnée...">
+                    <button type="submit" class="searchButton">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <div class="liveDataDiv" id="liveDataDiv"></div>
                 </div>
-             </div>
+            </div>
         </header>
         <article>
 
             <div id="map" class="sidebar-map">
-                            <!-- START OF SIDEBAR DIV -->
-            <div id="sidebar" class="sidebar collapsed">
-                <!-- Nav tabs -->
-                <div class="sidebar-tabs">
-                    <ul role="tablist">
-                        <li>
-                            <a href="#home" role="tab"><i class="fa-solid fa-map"></i></a>
-                        </li>
-                        <li>
-                            <a href="#profile" role="tab"><i class="fa-solid fa-database"></i></a>
-                        </li>
-                        <li class="disabled">
-                            <a href="#messages" role="tab"><i class="fa fa-envelope"></i></a>
-                        </li>
-                        <li>
-                            <a href="https://github.com/Turbo87/sidebar-v2" role="tab" target="_blank"><i
-                                    class="fa fa-github"></i></a>
-                        </li>
-                    </ul>
+                <!-- START OF SIDEBAR DIV -->
+                <div id="sidebar" class="sidebar collapsed">
+                    <!-- Nav tabs -->
+                    <div class="sidebar-tabs">
+                        <ul role="tablist">
+                            <li>
+                                <a href="#home" role="tab"><i class="fa-solid fa-map"></i></a>
+                            </li>
+                            <li>
+                                <a href="#profile" role="tab"><i class="fa-solid fa-database"></i></a>
+                            </li>
+                            <li class="disabled">
+                                <a href="#messages" role="tab"><i class="fa fa-envelope"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/Turbo87/sidebar-v2" role="tab" target="_blank"><i
+                                        class="fa fa-github"></i></a>
+                            </li>
+                        </ul>
 
-                    <ul role="tablist">
-                        <li>
-                            <a href="#settings" role="tab"><i class="fa fa-gear"></i></a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Tab panes -->
-                <div class="sidebar-content">
-                    <div class="sidebar-pane" id="home">
-                        <h1 class="sidebar-header">
-                            COUCHES
-                            <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                        </h1>
-                        <!-- !!! HERE WILL GO THE CONTENT OF LAYERSWITCHER !!! -->
-                        <div  class="layer-switcher">
-                            <h3><i class="fa-solid fa-layer-group"></i>  Fonds de cartes</h3>
-                            <div id="layers" class="leftside" >
-                                
-                                <label  class="labelexpanded">
-                                    
-                                    <input   type="radio"   name="targetgroup" value="Aerial" checked  onchange="toggleLayer(event);"> 
-                                        <div  class="radio-btns"> 
-                                            <img src="RSC/IMG/Aerial.png"/> 
-                                            <p> Aerial </p> 
-                                        </div>
-                                    </input>
-                                </label>
-                                
-                                
-                                <label class="labelexpanded"> 
-                                    <input   type="radio"     name="targetgroup" value="Aerial with labels"  onchange="toggleLayer(event);"> <div class="radio-btns"> <img src="RSC/IMG/Aerial with labels.png"> <p> Aerial with labels </p> </div> 
-                                </label>
-                                
-                                <label class="labelexpanded">
-                                    <input   type="radio"    name="targetgroup" value="Road"   onchange="toggleLayer(event);"> <div class="radio-btns"> <img src="RSC/IMG/Road.png"> <p> Road </p> </div> 
-                                </label>
-                                
-                                <label class="labelexpanded"> 
-                                    <input   type="radio"  name="targetgroup" value="Canvas Dark"  onchange="toggleLayer(event);"> <div class="radio-btns"> <img src="RSC/IMG/Road dark.png"> <p> Road dark </p> </div> 
-                                </label>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-
-
-                                <label>
-                                    Opacité <input class="opacity" type="range" min="0" max="1" step="0.01"/>
-                                </label>
-                      </div>
-                      <br>
-
-                       <h3><i class="fa-solid fa-minus"></i> Limtites Administratives</h3>
-                    </form>
-                      
-                    </div>
-                        
+                        <ul role="tablist">
+                            <li>
+                                <a href="#settings" role="tab"><i class="fa fa-gear"></i></a>
+                            </li>
+                        </ul>
                     </div>
 
-                    <div class="sidebar-pane" id="profile">
-                        <h1 class="sidebar-header">
-                            DONNEES THEMATIQUES<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                        </h1>
-                    </div>
+                    <!-- Tab panes -->
+                    <div class="sidebar-content">
+                        <div class="sidebar-pane" id="home">
+                            <h1 class="sidebar-header">
+                                COUCHES
+                                <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                            </h1>
+                            <!-- !!! HERE WILL GO THE CONTENT OF LAYERSWITCHER !!! -->
+                            <div class="layer-switcher">
+                                <h3><i class="fa-solid fa-layer-group"></i> Fonds de cartes</h3>
+                                <div id="layers" class="leftside">
 
-                    <div class="sidebar-pane" id="messages">
-                        <h1 class="sidebar-header">
-                            Messages<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                        </h1>
-                    </div>
+                                    <select id="layer-select">
+                                        <option value="Aerial">Aerial</option>
+                                        <option value="AerialWithLabelsOnDemand" selected>Aerial with labels</option>
+                                        <option value="RoadOnDemand">Road</option>
+                                        <option value="CanvasDark">Road dark</option>
+                                        <option value="OrdnanceSurvey">Ordnance Survey</option>
+                                    </select>
 
-                    <div class="sidebar-pane" id="settings">
-                        <h1 class="sidebar-header">
-                            Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                        </h1>
+                                    <label>
+                                        Opacité <input class="opacity" type="range" min="0" max="1" step="0.01" />
+                                    </label>
+                                </div>
+                                <br>
+
+                                <h3><i class="fa-solid fa-minus"></i> Limtites Administratives</h3>
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                        <div class="sidebar-pane" id="profile">
+                            <h1 class="sidebar-header">
+                                DONNEES THEMATIQUES<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                            </h1>
+                        </div>
+
+                        <div class="sidebar-pane" id="messages">
+                            <h1 class="sidebar-header">
+                                Messages<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                            </h1>
+                        </div>
+
+                        <div class="sidebar-pane" id="settings">
+                            <h1 class="sidebar-header">
+                                Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                            </h1>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- END OF SIDEBAR DIV -->
+                <!-- END OF SIDEBAR DIV -->
             </div>
 
-            
+
         </article>
 
         <footer></footer>
