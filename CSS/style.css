@@ -48,6 +48,12 @@ footer {
   font: 10pt 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
+#map .ol-zoom{
+  top: 10px;
+  left: auto;
+  right: 10px;
+}
+
 .info {
   margin: 0;
 }
@@ -202,29 +208,7 @@ footer {
 	transition: all 200ms ease;
 	cursor: text;
 }
-	.search:after {
-		content: "";
-		position: absolute;
-		width: 30px;
-		height: 20px;
-		right: -5px;
-		top: 21px;
-		background: #FFFFFF;
-		border-radius: 3px;
-		transform: rotate(-45deg);
-		transition: all 200ms ease;
-	}
-	
-	.search.active,
-	.search:hover {
-		width: 300px;
-		margin-right: 0px;
-    margin-left: -305px;
-    background-color: rgba(155, 192, 241, 0.7);
-	}
-  .search:after {
-    height: 0px;	
-  }
+
 
 
  /*** start : CSS for search bar ***/
@@ -233,8 +217,8 @@ footer {
   position: fixed;
   left: 60%;
   top: 45px;
-  margin-left: -305px;
-  width: 300px;
+  margin-left: -335px;
+  width: 360px;
   background-color: rgba(155, 192, 241, 0.7);
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1em;

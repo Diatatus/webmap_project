@@ -92,7 +92,7 @@ var interactionStyle = new ol.style.Style({
     })
 });
 
-// Base map
+// Base map (Bing map)
 
 const styles = [
   'RoadOnDemand',
@@ -145,19 +145,29 @@ function onChange() {
 select.addEventListener('change', onChange);
 onChange();
 
-function bindInputs(layerid, layer) {
-  const visibilityInput = $(layerid + ' input.visible');
+function bindInputs(layersid, layers) {
+  const visibilityInput = $(layersid + ' input.visible');
   visibilityInput.on('change', function () {
-    layer.setVisible(this.checked);
+    layers.setVisible(this.checked);
   });
-  visibilityInput.prop('checked', layer.getVisible());
+  visibilityInput.prop('checked', layers.getVisible());
 
-  const opacityInput = $(layerid + ' input.opacity');
+  const opacityInput = $(layersid + ' input.opacity');
   opacityInput.on('input change', function () {
-    layer.setOpacity(parseFloat(this.value));
+    layers.setOpacity(parseFloat(this.value));
   });
-  opacityInput.val(String(layer.getOpacity()));
+  opacityInput.val(String(layers.getOpacity()));
 }
+
+
+// ProgressBar
+var progress = new ol.control.ProgressBar({
+  // target: $('.options').get(0)
+  label: 'Chargement...',
+  layers: layers
+});
+map.addControl(progress);
+
 
 // Geoserver layer
 var Regions_CM = new ol.layer.Image({
@@ -166,7 +176,7 @@ var Regions_CM = new ol.layer.Image({
       url: 'http://' + serverPort + '/geoserver/' + geoserverWorkspace + '/wms',
       params: { 'LAYERS': geoserverWorkspace + ':' + regions, 'TILED': true },
       serverType: 'geoserver',
-      visible: true
+      visible: false
   })
 });
 
@@ -176,7 +186,7 @@ var Departements_CM = new ol.layer.Image({
       url: 'http://' + serverPort + '/geoserver/' + geoserverWorkspace + '/wms',
       params: { 'LAYERS': geoserverWorkspace + ':' + departements, 'TILED': true },
       serverType: 'geoserver',
-      visible: true
+      visible: false
   })
 });
 
@@ -186,18 +196,11 @@ var Communes_CM = new ol.layer.Image({
       url: 'http://' + serverPort + '/geoserver/' + geoserverWorkspace + '/wms',
       params: { 'LAYERS': geoserverWorkspace + ':' + communes, 'TILED': true },
       serverType: 'geoserver',
-      visible: true
+      visible: false
   })
 });
 
-var overlayGroup = new ol.layer.Group({
-  title: 'Cameroun',
-  fold: true,
-  // layers: [indiaBldTile, indiaWbTile, indiaRdTile, indiaCtTile, indiaDsTile, indiaStTile]
-  layers: [Regions_CM,Departements_CM,Communes_CM]
-})
 
-map.addLayer(overlayGroup);
 
 
 
@@ -211,15 +214,8 @@ map.addControl(sidebar);
 
 
 // Control
-var ctrl = new ol.control.Scale({});
-function setDiagonal(val) {
-  var res = Math.sqrt(window.screen.width * window.screen.width + window.screen.height * window.screen.height) / val;
-  res = Math.round(res);
-  $('#ppi').val(res);
-  ctrl.set('ppi', res);
-  ctrl.setScale()
-}
-map.addControl(ctrl);
+// Control
+
 map.addControl(new ol.control.ScaleLine());
 
 function newaddGeoJsonToMap(url) {
