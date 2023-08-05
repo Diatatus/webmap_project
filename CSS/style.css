@@ -53,6 +53,9 @@ footer {
   left: auto;
   right: 10px;
 }
+span{
+  width: 15px;
+}
 
 .info {
   margin: 0;

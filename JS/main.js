@@ -106,7 +106,8 @@ let i, ii;
 for (i = 0, ii = styles.length; i < ii; ++i) {
   layers.push(
     new ol.layer.Tile({
-      visible: false,
+      opacity:1,
+      visible: true,
       preload: Infinity,
       source: new ol.source.BingMaps({
         key: 'AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R',
@@ -118,6 +119,7 @@ for (i = 0, ii = styles.length; i < ii; ++i) {
     })
   );
 }
+
 
 
 
@@ -145,19 +147,10 @@ function onChange() {
 select.addEventListener('change', onChange);
 onChange();
 
-function bindInputs(layersid, layers) {
-  const visibilityInput = $(layersid + ' input.visible');
-  visibilityInput.on('change', function () {
-    layers.setVisible(this.checked);
-  });
-  visibilityInput.prop('checked', layers.getVisible());
-
-  const opacityInput = $(layersid + ' input.opacity');
-  opacityInput.on('input change', function () {
-    layers.setOpacity(parseFloat(this.value));
-  });
-  opacityInput.val(String(layers.getOpacity()));
-}
+//Opacity
+$('#contrast').on('input', function() {
+  layers.setOpacity(parseFloat($(this).val())); 
+});
 
 
 // ProgressBar
