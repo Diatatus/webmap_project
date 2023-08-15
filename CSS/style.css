@@ -14,7 +14,7 @@ main {
   display: grid;
   grid-template-areas:
     "head head head"
-    "content content content"
+    "wrapper content content"
     "foot foot foot";
   grid-template-rows: 60px auto 20px;
 }
@@ -24,7 +24,7 @@ header {
 }
 
 article {
-  grid-area: content;
+  grid-area: wrapper content;
 }
 
 footer {
@@ -53,6 +53,72 @@ footer {
   left: auto;
   right: 10px;
 }
+
+#menu-toggle{
+  color:white;
+  position: absolute;
+  top: 16px;
+  left: 0px;
+  transform: rotate(0deg);
+  background: black;
+  }
+  
+  
+  
+  #wrapper {
+    padding-left: 320px;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+  }
+  
+  #wrapper.toggled {
+    padding-left: 0px;
+  }
+  
+  
+  #sidebar-wrapper {
+             position: fixed;
+    
+                      left: 320px;
+    
+                      width: 320px;
+    
+                      height: 86.5%;
+    
+                      margin-left: -320px;
+    
+                      overflow-y: scroll;
+  
+                overflow-x: hidden;
+                      background: #ffffff;
+    
+              -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+          
+  }
+  
+  
+  #wrapper.toggled #sidebar-wrapper {width: 0px;
+  }
+  
+  
+  #wrapper.toggled #page-content-wrapper {
+    position: absolute;
+    margin-right: -250px;
+    width:100%;
+  }
+  
+  
+  
+  
+  /* Sidebar Styles */
+  
+  
+
 span{
   width: 15px;
 }

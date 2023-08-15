@@ -55,7 +55,9 @@
 <body>
     <main>
         <header>
+            
             <div id="head" class="header">
+                <button id="menu-toggle" class="btn btn-secondary"><i id="toggleIcon" class="fa fa-angle-double-down"></i> CARTES <i class="fa fa-filter"></i></button>
                 <img src="RSC/IMG/arrdel.jpg" alt="" style="width: inherit; height: inherit; vertical-align: middle;">
 
             </div>
@@ -73,91 +75,43 @@
         </header>
         <article>
 
-            <div id="map" class="sidebar-map">
-                <!-- START OF SIDEBAR DIV -->
-                <div id="sidebar" class="sidebar collapsed">
-                    <!-- Nav tabs -->
-                    <div class="sidebar-tabs">
-                        <ul role="tablist">
-                            <li>
-                                <a href="#home" role="tab"><i class="fa-solid fa-map"></i></a>
-                            </li>
-                            <li>
-                                <a href="#profile" role="tab"><i class="fa-solid fa-database"></i></a>
-                            </li>
-                            <li class="disabled">
-                                <a href="#messages" role="tab"><i class="fa fa-envelope"></i></a>
-                            </li>
-                            <li>
-                                <a href="https://github.com/Turbo87/sidebar-v2" role="tab" target="_blank"><i
-                                        class="fa fa-github"></i></a>
-                            </li>
-                        </ul>
-
-                        <ul role="tablist">
-                            <li>
-                                <a href="#settings" role="tab"><i class="fa fa-gear"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Tab panes -->
-                    <div class="sidebar-content">
-                        <div class="sidebar-pane" id="home">
-                            <h1 class="sidebar-header">
-                                COUCHES
-                                <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                            </h1>
-                            <!-- !!! HERE WILL GO THE CONTENT OF LAYERSWITCHER !!! -->
-                            <div class="layer-switcher">
-                                <h3><i class="fa-solid fa-layer-group"></i> Fonds de cartes</h3>
-                                <div id="layers" class="leftside">
-
-                                    <select id="layer-select">
-                                        <option value="Aerial">Aerial</option>
-                                        <option value="AerialWithLabelsOnDemand" selected>Aerial with labels</option>
-                                        <option value="RoadOnDemand">Road</option>
-                                        <option value="CanvasDark">Road dark</option>
-                                        <option value="OrdnanceSurvey">Ordnance Survey</option>
-                                        <option value="noneTile">NoneTile</option>
-                                    </select><span></span>
-            
-
-                                    <label>
-                                        Opacité <input id="contrast" type="range" value="1" max="1" min="0" step="0.01" />
-                                    </label>
+            <div id="wrapper">
+                <!-- Sidebar -->
+                <div id="sidebar-wrapper">
+              
+                                <!-- !!! HERE WILL GO THE CONTENT OF LAYERSWITCHER !!! -->
+                                <div class="layer-switcher">
+                                    <h3><i class="fa-solid fa-layer-group"></i> Fonds de cartes</h3>
+                                    <div id="layers" class="leftside">
+    
+                                        <select id="layer-select">
+                                            <option value="Aerial">Aerial</option>
+                                            <option value="AerialWithLabelsOnDemand" selected>Aerial with labels</option>
+                                            <option value="RoadOnDemand">Road</option>
+                                            <option value="CanvasDark">Road dark</option>
+                                            <option value="OrdnanceSurvey">Ordnance Survey</option>
+                                            <option value="noneTile">NoneTile</option>
+                                        </select><span></span>
+                
+    
+                                        <label>
+                                            Opacité <input id="contrast" type="range" value="1" max="1" min="0" step="0.01" />
+                                        </label>
+                                    </div>
+                                    <br>
+    
+                                    <h3><i class="fa-solid fa-minus"></i> Limites Administratives</h3>
+                                    </form>
+    
                                 </div>
-                                <br>
-
-                                <h3><i class="fa-solid fa-minus"></i> Limites Administratives</h3>
-                                </form>
-
-                            </div>
-
-                        </div>
-
-                        <div class="sidebar-pane" id="profile">
-                            <h1 class="sidebar-header">
-                                DONNEES THEMATIQUES<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                            </h1>
-                        </div>
-
-                        <div class="sidebar-pane" id="messages">
-                            <h1 class="sidebar-header">
-                                Messages<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                            </h1>
-                        </div>
-
-                        <div class="sidebar-pane" id="settings">
-                            <h1 class="sidebar-header">
-                                Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                            </h1>
-                        </div>
+            
+                        
                     </div>
-                </div>
-                <!-- END OF SIDEBAR DIV -->
-            </div>
+                    <!-- END OF SIDEBAR DIV -->
+                    <div id="map" class="map">
 
+                </div>
+                </div>
 
         </article>
 
