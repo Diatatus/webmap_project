@@ -193,21 +193,23 @@ var Communes_CM = new ol.layer.Image({
   })
 });
 
-$("#menu-toggle").click(function(e) {
-  e.preventDefault();
-     var isIE11 = !!navigator.userAgent.match(/Trident.*rv\:11\./);
 
-         $("#toggleIcon").toggleClass("fa fa-angle-double-down fa fa-angle-double-up")
-         $("#wrapper").toggleClass("toggled");
- 
-       if(isIE11){
-           if($("#wrapper").hasClass("toggled")){
-         $('#sidebar-wrapper').css("margin-left", "-268px")
-       } else {
-         $('#sidebar-wrapper').css("margin-left", "-250px")	
-           }	 
-     }
-     });
+    // Overlay
+    var menu = new ol.control.Overlay ({ 
+      closeBox : true, 
+      className: "slide-left menu", 
+      content: $("#menu").get(0)
+    });
+    map.addControl(menu);
+  
+    // A toggle control to show/hide the menu
+    var t = new ol.control.Toggle({
+      html: '<i class="fa fa-bars" ></i>',
+      className: "menu",
+      title: "Menu",
+      onToggle: function() { menu.toggle(); }
+    });
+    map.addControl(t);
 
 
 

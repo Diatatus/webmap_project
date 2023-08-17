@@ -14,7 +14,7 @@ main {
   display: grid;
   grid-template-areas:
     "head head head"
-    "wrapper content content"
+    "wrapper wrapper wrapper"
     "foot foot foot";
   grid-template-rows: 60px auto 20px;
 }
@@ -24,99 +24,77 @@ header {
 }
 
 article {
-  grid-area: wrapper content;
+  grid-area: wrapper;
+
 }
+
 
 footer {
   grid-area: foot;
 }
 
-#image {
-  background-color: #eee;
-  padding: 1em;
-  clear: both;
-  display: inline-block;
-  margin: 1em 0;
-}
+
 
 
 #map {
   width: 100vw;
   height: 88vh;
   display: block;
-  position: relative;
+  position: inherit;
   font: 10pt 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
-#map .ol-zoom{
-  top: 10px;
-  left: auto;
-  right: 10px;
-}
-
-#menu-toggle{
-  color:white;
-  position: absolute;
-  top: 16px;
-  left: 0px;
-  transform: rotate(0deg);
-  background: black;
-  }
-  
-  
-  
-  #wrapper {
-    padding-left: 320px;
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-  }
-  
-  #wrapper.toggled {
-    padding-left: 0px;
-  }
-  
-  
-  #sidebar-wrapper {
-             position: fixed;
-    
-                      left: 320px;
-    
-                      width: 320px;
-    
-                      height: 86.5%;
-    
-                      margin-left: -320px;
-    
-                      overflow-y: scroll;
-  
-                overflow-x: hidden;
-                      background: #ffffff;
-    
-              -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-          
-  }
-  
-  
-  #wrapper.toggled #sidebar-wrapper {width: 0px;
-  }
-  
-  
-  #wrapper.toggled #page-content-wrapper {
-    position: absolute;
-    margin-right: -250px;
-    width:100%;
-  }
-  
-  
-  
   
   /* Sidebar Styles */
   
+  .ol-overlay.menu {
+    width: 30%;
+    background: #fff;
+    color: #333;
+    box-shadow: 0px 0px 5px #000;
+    padding: 0.5em;
+    -webkit-transition: all 0.25s;
+    transition: all 0.25s;
+  }
+  /* style the close box */
+  .ol-overlay.menu .ol-closebox {
+    left: 1em;
+    top: 0.5em;
+  }
+  .ol-overlay.menu .ol-closebox:before {
+    content:"\f0c9";
+    font-family:FontAwesome;
+  }
+  #menu {
+    padding-top: 1.5em;
+    font-size: 0.9em;
+  }
+  /* menu button */
+  .ol-control.menu {
+    top: 0.5em;
+    left: 0.5em;
+  }
+  .ol-zoom {
+    left: auto;
+    right: 0.5em;
+  }
+
+  .ol-rotate {
+    right: 3em;
+  }
+  .ol-touch .ol-rotate {
+    right: 3.5em;
+  }
+  /**/
+  .ol-overlay img {
+    max-width: 90%;
+  }
+  .data,
+  .data p {
+    margin:0;
+    text-align: center;
+    font-size:0.9em;
+  }
   
 
 span{

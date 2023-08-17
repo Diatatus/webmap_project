@@ -10,19 +10,25 @@
   "author": "Mohamadou Laminou",
   "license": "ISC",
   "dependencies": {
+    "antd": "^5.8.3",
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "geostyler": "^13.1.1",
+    "geostyler-sld-parser": "^5.1.0",
     "jquery": "^3.7.0",
+    "ol": "^7.5.1",
     "ol-ext": "^4.0.7",
     "ol-layerswitcher": "^4.1.1",
     "ol-side-panel": "^1.0.6",
     "openlayers-ext": "^3.1.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "reqwest": "^2.0.5",
     "sphp": "^0.6.3",
     "ws": "^8.13.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.0.1"
   }
 }

@@ -13,7 +13,10 @@
     <title>GEO TERRITOIRES</title>
     <link rel="shortcut icon " href="RSC\IMG\map.png">
     <!-- OpenLayers CSS -->
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL,Object.assign"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@latest/ol.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/ol@latest/dist/ol.js"></script>
+    <script
+        src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL,Object.assign"></script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- jQuery -->
@@ -29,11 +32,6 @@
     <script type='text/javascript'
         src='https://www.bing.com/api/maps/mapcontrol?key=AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R'></script>
 
-    <!-- Openlayers -->
-    <link rel="stylesheet" href="CSS\ol.css" />
-    <script type="text/javascript" src="JS\ol.js"></script>
-    <script
-        src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL,Object.assign"></script>
 
     <!-- ol-ext -->
     <link rel="stylesheet" href="node_modules/ol-ext/dist/ol-ext.css" />
@@ -51,13 +49,15 @@
 
     <!-- Custom styles -->
 </head>
+<style compact={true}>
+
+</style>
 
 <body>
     <main>
         <header>
-            
+
             <div id="head" class="header">
-                <button id="menu-toggle" class="btn btn-secondary"><i id="toggleIcon" class="fa fa-angle-double-down"></i> CARTES <i class="fa fa-filter"></i></button>
                 <img src="RSC/IMG/arrdel.jpg" alt="" style="width: inherit; height: inherit; vertical-align: middle;">
 
             </div>
@@ -75,43 +75,40 @@
         </header>
         <article>
 
-            <div id="wrapper">
+
+            <div id="map" class="map"></div>
+            <div id="menu">
                 <!-- Sidebar -->
-                <div id="sidebar-wrapper">
-              
-                                <!-- !!! HERE WILL GO THE CONTENT OF LAYERSWITCHER !!! -->
-                                <div class="layer-switcher">
-                                    <h3><i class="fa-solid fa-layer-group"></i> Fonds de cartes</h3>
-                                    <div id="layers" class="leftside">
-    
-                                        <select id="layer-select">
-                                            <option value="Aerial">Aerial</option>
-                                            <option value="AerialWithLabelsOnDemand" selected>Aerial with labels</option>
-                                            <option value="RoadOnDemand">Road</option>
-                                            <option value="CanvasDark">Road dark</option>
-                                            <option value="OrdnanceSurvey">Ordnance Survey</option>
-                                            <option value="noneTile">NoneTile</option>
-                                        </select><span></span>
-                
-    
-                                        <label>
-                                            Opacité <input id="contrast" type="range" value="1" max="1" min="0" step="0.01" />
-                                        </label>
-                                    </div>
-                                    <br>
-    
-                                    <h3><i class="fa-solid fa-minus"></i> Limites Administratives</h3>
-                                    </form>
-    
-                                </div>
-            
-                        
+
+                <!-- !!! HERE WILL GO THE CONTENT OF LAYERSWITCHER !!! -->
+                <div class="layer-switcher">
+                    <h3><i class="fa-solid fa-layer-group"></i> Fonds de cartes</h3>
+                    <div id="layers" class="leftside">
+
+                        <select id="layer-select">
+                            <option value="Aerial">Aerial</option>
+                            <option value="AerialWithLabelsOnDemand" selected>Aerial with labels</option>
+                            <option value="RoadOnDemand">Road</option>
+                            <option value="CanvasDark">Road dark</option>
+                            <option value="OrdnanceSurvey">Ordnance Survey</option>
+                            <option value="noneTile">NoneTile</option>
+                        </select><span></span>
+
+
+                        <label>
+                            Opacité <input id="contrast" type="range" value="1" max="1" min="0" step="0.01" />
+                        </label>
                     </div>
-                    <!-- END OF SIDEBAR DIV -->
-                    <div id="map" class="map">
+                    <br>
+
+                    <h3><i class="fa-solid fa-minus"></i> Limites Administratives</h3>
+                    </form>
 
                 </div>
-                </div>
+            </div>
+
+            <!-- END OF SIDEBAR DIV -->
+
 
         </article>
 
