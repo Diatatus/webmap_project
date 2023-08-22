@@ -6,6 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <meta name="description" content="Control to select features by attributes	." />
+    <meta name="keywords" content="ol, overlay, popup, vector, feature, attribute" />
 
     <meta name="description" content="Control to select features by attributes	." />
     <meta name="keywords" content="ol, overlay, popup, vector, feature, attribute" />
@@ -31,6 +35,9 @@
     <!-- Bingmap -->
     <script type='text/javascript'
         src='https://www.bing.com/api/maps/mapcontrol?key=AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R'></script>
+    <script type='text/javascript'
+        src='https://www.bing.com/api/maps/mapcontrol?key=AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R&callback=loadMapScenario'
+        async defer></script>
 
 
     <!-- ol-ext -->
@@ -49,7 +56,7 @@
 
     <!-- Custom styles -->
 </head>
-<style compact={true}>
+<style>
 
 </style>
 
@@ -86,31 +93,161 @@
                     <div id="layers" class="leftside">
 
                         <select id="layer-select">
-                            <option value="Aerial">Aerial</option>
-                            <option value="AerialWithLabelsOnDemand" selected>Aerial with labels</option>
-                            <option value="RoadOnDemand">Road</option>
-                            <option value="CanvasDark">Road dark</option>
-                            <option value="OrdnanceSurvey">Ordnance Survey</option>
-                            <option value="noneTile">NoneTile</option>
+                            <option value="Aerial"
+                                data-img="https://data.world/api/datadotworld-apps/dataset/python/file/raw/logo.png">
+                                Aérienne</option>
+                            <option value="AerialWithLabelsOnDemand" selected>Aérienne (etiquetée)</option>
+                            <option value="RoadOnDemand">Route standard</option>
+                            <option value="CanvasDark">Route (sombre)</option>
+                            <option value="noneTile">Fond vide</option>
                         </select><span></span>
-
-
-                        <label>
-                            Opacité <input id="contrast" type="range" value="1" max="1" min="0" step="0.01" />
-                        </label>
                     </div>
                     <br>
 
                     <h3><i class="fa-solid fa-minus"></i> Limites Administratives</h3>
-                    </form>
+                  
+
 
                 </div>
+
             </div>
 
+
             <!-- END OF SIDEBAR DIV -->
+            <div id="popup" class="ol-popup">
+                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                <div id="popup-content"></div>
+            </div>
+            <!-- <div class="toggleAttQueryDiv" id="toggleAttQueryDiv"></div> -->
+            <div class="attQueryDiv" id="attQueryDiv">
+                <div class="headerDiv" id="headerDiv">
+                    <label for="">Attribute Query</label>
+                </div>
+                <!-- <br> -->
+                <label for="">Select Layer</label>
+                <select name="selectLayer" id="selectLayer">
+                </select><br><br>
+                <!-- <br><br> -->
+
+                <label for="">Select Attribute</label>
+                <select name="selectAttribute" id="selectAttribute">
+                </select><br><br>
+                <!-- <br><br> -->
+
+                <label for="">Select Operator</label>
+                <select name="selectOperator" id="selectOperator">
+                </select><br><br>
+                <!-- <br><br> -->
+
+                <label for="">Enter Value</label>
+                <input type="text" name="enterValue" id="enterValue">
+                </select><br><br>
+                <!-- <br><br> -->
+
+                <button type="button" id="attQryRun" class="attQryRun" onclick="attributeQuery()">Run</button>
+
+
+            </div>
+            <!-- <div class="toggleAttributeListDiv" id="toggleAttributeListDiv"></div> -->
+            <!-- <div class="toggleAttQueryDiv" id="toggleAttQueryDiv"></div> -->
+            <div class="attQueryDiv" id="attQueryDiv">
+                <div class="headerDiv" id="headerDiv">
+                    <label for="">Attribute Query</label>
+                </div>
+                <!-- <br> -->
+                <label for="">Select Layer</label>
+                <select name="selectLayer" id="selectLayer">
+                </select>
+                <!-- <br><br> -->
+
+                <label for="">Select Attribute</label>
+                <select name="selectAttribute" id="selectAttribute">
+                </select>
+                <!-- <br><br> -->
+
+                <label for="">Select Operator</label>
+                <select name="selectOperator" id="selectOperator">
+                </select>
+                <!-- <br><br> -->
+
+                <label for="">Enter Value</label>
+                <input type="text" name="enterValue" id="enterValue">
+                </select>
+                <!-- <br><br> -->
+
+                <button type="button" id="attQryRun" class="attQryRun">Run</button>
+                <button type="button" id="attQryClear" class="attQryClear">Clear</button>
+
+            </div>
+            <!-- <div class="toggleAttributeListDiv" id="toggleAttributeListDiv"></div> -->
+            <div class="attListDiv" id="attListDiv">
+            </div>
+
+            <div class="spQueryDiv" id="spQueryDiv">
+                <div class="headerDiv" id="headerDiv">
+                    <label for="">Spatial Query</label>
+                </div>
+                <label for="">Select featues of </label>
+                <select name="buffSelectLayer" id="buffSelectLayer">
+                </select>
+                <!-- <br><br> -->
+
+                <label for="">that are </label>
+                <select name="qryType" id="qryType">
+                    <option value="withinDistance">Within Distance of</option>
+                    <option value="intersecting">Intersecting</option>
+                    <option value="completelyWithin">Completely Within</option>
+                </select>
+                <!-- <br><br> -->
+
+                <div class="bufferDiv" id="bufferDiv">
+                    <!-- <label for="">Distnace in meter</label> -->
+                    <input type="number" name="bufferDistance" id="bufferDistance" placeholder="1000">
+                    <select name="distanceUnits" id="distanceUnits">
+                        <option value="meters">Meters</option>
+                        <option value="kilometers">Kilometers</option>
+                        <option value="feet">Feet</option>
+                        <option value="nautical miles">Nautical Miles</option>
+                    </select>
+                    <!-- <br><br> -->
+
+                    <label for="">from</label>
+                </div>
+
+
+                <select name="srcCriteria" id="srcCriteria">
+                    <option value="pointMarker">Point Marker</option>
+                    <option value="lineMarker">Line Marker</option>
+                    <option value="polygonMarker">Polygon Marker</option>
+                </select>
+                <!-- <br><br> -->
+
+                <button type="button" id="spUserInput" class="spUserInput"><img src="resources/images/selection.png"
+                        alt="" style="width:17px;height:17px;vertical-align:middle"></img></button>
+
+                <button type="button" id="spQryRun" class="spQryRun">Run</button>
+
+                <button type="button" id="spQryClear" class="spQryClear">Clear</button>
+            </div>
+
+
+            <div class="settingsDiv" id="settingsDiv">
+                <div class="headerDiv" id="headerDiv">
+                    <label for="">Configurations</label>
+                </div>
+                <label for="">FeatureInfo Layer</label><br>
+                <select name="featureInfoLayer" id="featureInfoLayer">
+                    <option value="All layers">All layers</option>
+                    <option value="Visible layers">Visible layers</option>
+                </select>
+                <label for="">Editing Layer</label><br>
+                <select name="editingLayer" id="editingLayer">
+                </select>
+            </div>
 
 
         </article>
+
 
         <footer></footer>
     </main>
@@ -123,7 +260,7 @@
 
 
     <script type="text/javascript" src="JS/main.js"></script>
-    <script src="RSC/GeoJson/region.js"></script>
+    <script src="RSC/GeoJson/regional.geojson"></script>
 </body>
 
 </html>

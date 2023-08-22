@@ -16,6 +16,8 @@ app.get("/", (__, res) => {
 
 app.use("/CSS", express.static(__dirname + "/CSS/"))
 
+app.use("/HTML", express.static(__dirname + "/HTML/"))
+
 app.use("/JS", express.static(__dirname + "/JS/"))
 
 app.use("/PHP", express.static(__dirname + "/PHP/"))
