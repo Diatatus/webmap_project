@@ -93,33 +93,6 @@ var interactionStyle = new ol.style.Style({
 });
 
 
-// Base map (Bing map)
-
-const styles = [
-  'RoadOnDemand',
-  'Aerial',
-  'AerialWithLabelsOnDemand',
-  'CanvasDark',
-];
-const layers = [];
-let i, ii;
-for (i = 0, ii = styles.length; i < ii; ++i) {
-  layers.push(
-    new ol.layer.Tile({
-      opacity:1,
-      visible: true,
-      preload: Infinity,
-      source: new ol.source.BingMaps({
-        key: 'AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R',
-        imagerySet: styles[i],
-        // use maxZoom 19 to see stretched tiles instead of the BingMaps
-        // "no photos at this zoom level" tiles
-        // maxZoom: 19
-      }),
-    })
-  );
-}
-
 
 // The Map
 var mapView =  new ol.View({
@@ -130,38 +103,69 @@ var mapView =  new ol.View({
 var map = new ol.Map({
   target: 'map',
   view: mapView,
-  layers: layers,
   controls : []
 });
 
+//Bing map Tile
 
+var bingMapsAerial = new ol.layer.Tile({
+    title: 'Aerial',
+    visible: true,
+    type: 'base',
+    preload: Infinity,
+    source: new ol.source.BingMaps({
+      key: 'AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R',
+      imagerySet: 'Aerial',
+    })
+  });
+  
+  var bingMapsAerialWithLabelsOnDemand = new ol.layer.Tile({
+    title: 'Aerial with labels',
+    visible: false,
+    type: 'base',
+    preload: Infinity,
+    source: new ol.source.BingMaps({
+      key: 'AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R',
+      imagerySet: 'AerialWithLabelsOnDemand',
+    })
+  });
+  
+  var bingMapsRoadOnDemand = new ol.layer.Tile({
+    title:'Road',
+    visible: false,
+    type: 'base',
+    preload: Infinity,
+    source: new ol.source.BingMaps({
+      key: 'AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R',
+      imagerySet: 'RoadOnDemand',
+    })
+  });
+  
+  var bingMapsCanvasDark = new ol.layer.Tile({
+    title: "Canvas Dark",
+    visible: false,
+    type: 'base',
+    preload: Infinity,
+    source: new ol.source.BingMaps({
+      key: 'AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R',
+      imagerySet: 'CanvasDark',
+    })
+  });
 
-
-
-const selecte = document.getElementById('layer-select');
-function onChange() {
-  const style = selecte.value;
-  for (let i = 0, ii = layers.length; i < ii; ++i) {
-    layers[i].setVisible(styles[i] === style);
-  }
-
-}
-
-selecte.addEventListener('change', onChange);
-onChange();
-
-
-
-// ProgressBar
-var progress = new ol.control.ProgressBar({
-  // target: $('.options').get(0)
-  label: 'Chargement...',
-  layers: layers
+  var noneTile = new ol.layer.Tile({
+    title: 'None',
+    type: 'base',
+    visible: true
 });
-map.addControl(progress);
+  
+var baseGroup = new ol.layer.Group({
+    title: 'Base Maps',
+    fold: true,
+    layers: [bingMapsAerial,bingMapsAerialWithLabelsOnDemand,bingMapsRoadOnDemand,bingMapsCanvasDark, noneTile]
+});
 
 
-// GeoJSON layer
+// WMS layer
 var Cameroun_Regions = new ol.layer.Image({
   title: 'Cameroun_Regions',
   source: new ol.source.ImageWMS({
@@ -186,7 +190,7 @@ var Cameroun_Departements = new ol.layer.Image({
   
 });
 
-map.addLayer(Cameroun_Departements);
+
 
 var Cameroun_Communes = new ol.layer.Image({
   title: 'Cameroun_Regions',
@@ -206,7 +210,25 @@ var overlayGroup = new ol.layer.Group({
   layers: [Cameroun_Regions, Cameroun_Departements, Cameroun_Communes]
 })
 
+map.addLayer(baseGroup);
 map.addLayer(overlayGroup);
+
+// map.addLayer(lbLayer);
+
+for (y = 0; y < map.getLayers().getLength(); y++) {
+    var lyr1 = map.getLayers().item(y)
+    if (lyr1.get('title') == 'Base Maps') { } else {
+        if (lyr1.getLayers().getLength() > 0) {
+            for (z = 0; z < lyr1.getLayers().getLength(); z++) {
+                var lyr2 = lyr1.getLayers().item(z);
+                layerList.push(lyr2.getSource().getParams().LAYERS);
+            }
+        } else {
+            layerList.push(lyr1.getSource().getParams().LAYERS);
+        }
+    }
+
+}
 
 
 
@@ -226,34 +248,11 @@ homeElement.appendChild(homeButton);
 toolbarDivElement.appendChild(homeElement);
 
 homeButton.addEventListener("click", () => {
-    location.href = "HTML/index.html";
+    location.href = "index.js";
 })
 
 // map.addControl(homeControl);
 // end : home Control
-
-
-
-
-
-    // Overlay
-    var menu = new ol.control.Overlay ({ 
-      closeBox : true, 
-      className: "slide-left menu", 
-      content: $("#menu").get(0)
-    });
-    map.addControl(menu);
-  
-    // A toggle control to show/hide the menu
-    var t = new ol.control.Toggle({
-      html: '<i class="fa fa-bars" ></i>',
-      className: "menu",
-      title: "Menu",
-      onToggle: function() { menu.toggle(); }
-    });
-    map.addControl(t);
-
-
 
 
 
@@ -309,9 +308,103 @@ lyrsButton.addEventListener("click", () => {
 })
 // end : Layers Control
 
-// Control
+// start : pan Control
+var panButton = document.createElement('button');
+panButton.innerHTML = '<img src="RSC/IMG/pan.svg" alt="" class="myImg"></img>';
+panButton.className = 'myButton';
+panButton.id = 'panButton';
+panButton.title = 'Pan';
 
-map.addControl(new ol.control.ScaleLine());
+var panElement = document.createElement('div');
+panElement.className = 'myButtonDiv';
+panElement.appendChild(panButton);
+toolbarDivElement.appendChild(panElement);
+
+var panFlag = false;
+var drgPanInteraction = new ol.interaction.DragPan();
+panButton.addEventListener("click", () => {
+    panButton.classList.toggle('clicked');
+    panFlag = !panFlag;
+    if (panFlag) {
+        document.getElementById("map").style.cursor = "grab";
+        map.addInteraction(drgPanInteraction);
+    } else {
+        document.getElementById("map").style.cursor = "default";
+        map.removeInteraction(drgPanInteraction);
+    }
+})
+// end : pan Control
+
+// start : zoomIn Control
+
+var zoomInInteraction = new ol.interaction.DragBox();
+
+zoomInInteraction.on('boxend', function () {
+    var zoomInExtent = zoomInInteraction.getGeometry().getExtent();
+    map.getView().fit(zoomInExtent);
+});
+
+var ziButton = document.createElement('button');
+ziButton.innerHTML = '<img src="RSC/IMG/zoomIn.svg" alt="" class="myImg"></img>';
+ziButton.className = 'myButton';
+ziButton.id = 'ziButton';
+ziButton.title = 'Zoom In';
+
+var ziElement = document.createElement('div');
+ziElement.className = 'myButtonDiv';
+ziElement.appendChild(ziButton);
+toolbarDivElement.appendChild(ziElement);
+
+var zoomInFlag = false;
+ziButton.addEventListener("click", () => {
+    ziButton.classList.toggle('clicked');
+    zoomInFlag = !zoomInFlag;
+    if (zoomInFlag) {
+        document.getElementById("map").style.cursor = "zoom-in";
+        map.addInteraction(zoomInInteraction);
+    } else {
+        map.removeInteraction(zoomInInteraction);
+        document.getElementById("map").style.cursor = "default";
+    }
+})
+
+// end : zoomIn Control
+
+// start : zoomOut Control
+var zoomOutInteraction = new ol.interaction.DragBox();
+
+zoomOutInteraction.on('boxend', function () {
+    var zoomOutExtent = zoomOutInteraction.getGeometry().getExtent();
+    map.getView().setCenter(ol.extent.getCenter(zoomOutExtent));
+
+    mapView.setZoom(mapView.getZoom() - 1)
+});
+
+var zoButton = document.createElement('button');
+zoButton.innerHTML = '<img src="RSC/IMG/zoomOut.png" alt="" class="myImg"></img>';
+zoButton.className = 'myButton';
+zoButton.id = 'zoButton';
+zoButton.title = 'Zoom Out';
+
+var zoElement = document.createElement('div');
+zoElement.className = 'myButtonDiv';
+zoElement.appendChild(zoButton);
+toolbarDivElement.appendChild(zoElement);
+
+var zoomOutFlag = false;
+zoButton.addEventListener("click", () => {
+    zoButton.classList.toggle('clicked');
+    zoomOutFlag = !zoomOutFlag;
+    if (zoomOutFlag) {
+        document.getElementById("map").style.cursor = "zoom-out";
+        map.addInteraction(zoomOutInteraction);
+    } else {
+        map.removeInteraction(zoomOutInteraction);
+        document.getElementById("map").style.cursor = "default";
+    }
+})
+// end : zoomOut Control
+
 
 
 // start : FeatureInfo Control
@@ -988,6 +1081,87 @@ function addMapLayerList_spQry() {
 };
 // end : spatial query
 
+// start : start editing Control
+var editgeojson;
+var editLayer;
+var modifiedFeatureList = [];
+var editTask;
+var editTaskName;
+var modifiedFeature = false;
+var modifyInteraction;
+var featureAdd;
+var snap_edit;
+var selectedFeatureOverlay = new ol.layer.Vector({
+    title: 'Selected Feature',
+    source: new ol.source.Vector(),
+    map: map,
+    style: highlightStyle
+});
+
+var startEditingButton = document.createElement('button');
+startEditingButton.innerHTML = '<img src="RSC/IMG/edit.png" alt="" class="myImg"></img>';
+startEditingButton.className = 'myButton';
+startEditingButton.id = 'startEditingButton';
+startEditingButton.title = 'Start Editing';
+
+var startEditingElement = document.createElement('div');
+startEditingElement.className = 'myButtonDiv';
+startEditingElement.appendChild(startEditingButton);
+toolbarDivElement.appendChild(startEditingElement);
+
+var startEditingFlag = false;
+startEditingButton.addEventListener("click", () => {
+    startEditingButton.classList.toggle('clicked');
+    startEditingFlag = !startEditingFlag;
+    document.getElementById("map").style.cursor = "default";
+    if (startEditingFlag) {
+        document.getElementById("editingControlsDiv").style.display = "block";
+        editLayer = document.getElementById('editingLayer').value;
+        var style = new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: 'rgba(0, 0, 0, 0)'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#00FFFF',
+                width: 1
+            }),
+            image: new ol.style.Circle({
+                radius: 7,
+                fill: new ol.style.Fill({
+                    color: '#00FFFF'
+                })
+            })
+        });
+
+        if (editgeojson) {
+            editgeojson.getSource().clear();
+            map.removeLayer(editgeojson);
+        }
+
+        editgeojson = new ol.layer.Vector({
+            title: "Edit Layer",
+            source: new ol.source.Vector({
+                format: new ol.format.GeoJSON(),
+                url: function (extent) {
+                    return 'http://' + serverPort + '/geoserver/' + geoserverWorkspace + '/ows?service=WFS&' +
+                        'version=1.0.0&request=GetFeature&typeName=' + editLayer + '&' +
+                        'outputFormat=application/json&srsname=EPSG:3857&' +
+                        'bbox=' + extent.join(',') + ',EPSG:4326';
+                },
+                strategy: ol.loadingstrategy.bbox
+            }),
+            style: style,
+        });
+        map.addLayer(editgeojson);
+
+    } else {
+        document.getElementById("editingControlsDiv").style.display = "none";
+        editgeojson.getSource().clear();
+        map.removeLayer(editgeojson);
+    }
+})
+// end : start editing Control
+
 
 // start : settings Control
 var settingsButton = document.createElement('button');
@@ -1020,6 +1194,456 @@ var allControl = new ol.control.Control({
     element: toolbarDivElement
 })
 map.addControl(allControl);
+
+// start : add feature control
+
+var editingControlsDivElement = document.getElementById('editingControlsDiv');
+
+var addFeatureButton = document.createElement('button');
+addFeatureButton.innerHTML = '<img src="RSC/IMG/editAdd.png" alt="" class="myImg"></img>';
+addFeatureButton.className = 'myButton';
+addFeatureButton.id = 'addFeatureButton';
+addFeatureButton.title = 'Add Feature';
+
+var addFeatureElement = document.createElement('div');
+addFeatureElement.className = 'myButtonDiv';
+addFeatureElement.id = 'addFeatureButtonDiv';
+addFeatureElement.appendChild(addFeatureButton);
+editingControlsDivElement.appendChild(addFeatureElement);
+
+var addFeatureFlag = false;
+addFeatureButton.addEventListener("click", () => {
+    addFeatureButton.classList.toggle('clicked');
+    addFeatureFlag = !addFeatureFlag;
+    document.getElementById("map").style.cursor = "default";
+    if (addFeatureFlag) {
+        if (modifiedFeatureList) {
+            if (modifiedFeatureList.length > 0) {
+                var answer = confirm('Save edits?');
+                if (answer) {
+                    saveEdits(editTask);
+                    modifiedFeatureList = [];
+                } else {
+                    // cancelEdits();
+                    modifiedFeatureList = [];
+                }
+
+            }
+        }
+        editTask = 'insert';
+        addFeature();
+    } else {
+        if (modifiedFeatureList.length > 0) {
+            var answer = confirm('You have unsaved edits. Do you want to save edits?');
+            if (answer) {
+                saveEdits(editTask);
+                modifiedFeatureList = [];
+            } else {
+                // cancelEdits();
+                modifiedFeatureList = [];
+            }
+        }
+
+        map.un('click', modifyFeature);
+        selectedFeatureOverlay.getSource().clear();
+        map.removeLayer(selectedFeatureOverlay);
+        modifiedFeature = false;
+        map.removeInteraction(modifyInteraction);
+        map.removeInteraction(snap_edit);
+        editTask = '';
+
+
+        if (modifyInteraction) {
+            map.removeInteraction(modifyInteraction);
+        }
+        if (snap_edit) {
+            map.removeInteraction(snap_edit);
+        }
+        if (drawInteraction) {
+            map.removeInteraction(drawInteraction);
+        }
+    }
+})
+
+function addFeature(evt) {
+    if (clickSelectedFeatureOverlay) {
+        clickSelectedFeatureOverlay.getSource().clear();
+        map.removeLayer(clickSelectedFeatureOverlay);
+    }
+
+    if (modifyInteraction) {
+        map.removeInteraction(modifyInteraction);
+    }
+    if (snap_edit) {
+        map.removeInteraction(snap_edit);
+    }
+
+    var interactionType;
+    source_mod = editgeojson.getSource();
+    drawInteraction = new ol.interaction.Draw({
+        source: editgeojson.getSource(),
+        type: editgeojson.getSource().getFeatures()[0].getGeometry().getType(),
+        style: interactionStyle
+    });
+    map.addInteraction(drawInteraction);
+    snap_edit = new ol.interaction.Snap({
+        source: editgeojson.getSource()
+    });
+    map.addInteraction(snap_edit);
+
+    drawInteraction.on('drawend', function (e) {
+        var feature = e.feature;
+        feature.set('geometry', feature.getGeometry());
+        modifiedFeatureList.push(feature);
+    })
+
+}
+
+// end : add feature control
+
+// start : Modify Feature Control
+var modifyFeatureButton = document.createElement('button');
+modifyFeatureButton.innerHTML = '<img src="RSC/IMG/editModify.svg" alt="" class="myImg"></img>';
+modifyFeatureButton.className = 'myButton';
+modifyFeatureButton.id = 'modifyFeatureButton';
+modifyFeatureButton.title = 'Modify Feature';
+
+var modifyFeatureElement = document.createElement('div');
+modifyFeatureElement.className = 'myButtonDiv';
+modifyFeatureElement.id = 'modifyFeatureButtonDiv';
+modifyFeatureElement.appendChild(modifyFeatureButton);
+editingControlsDivElement.appendChild(modifyFeatureElement);
+
+var modifyFeatureFlag = false;
+modifyFeatureButton.addEventListener("click", () => {
+    modifyFeatureButton.classList.toggle('clicked');
+    modifyFeatureFlag = !modifyFeatureFlag;
+    document.getElementById("map").style.cursor = "default";
+    if (modifyFeatureFlag) {
+        modifiedFeatureList = [];
+        selectedFeatureOverlay.getSource().clear();
+        map.removeLayer(selectedFeatureOverlay);
+        map.on('click', modifyFeature);
+        editTask = 'update';
+    } else {
+        if (modifiedFeatureList.length > 0) {
+            var answer = confirm('Save edits?');
+            if (answer) {
+                saveEdits(editTask);
+                modifiedFeatureList = [];
+            } else {
+                // cancelEdits();
+                modifiedFeatureList = [];
+            }
+        }
+        map.un('click', modifyFeature);
+        selectedFeatureOverlay.getSource().clear();
+        map.removeLayer(selectedFeatureOverlay);
+        modifiedFeature = false;
+        map.removeInteraction(modifyInteraction);
+        map.removeInteraction(snap_edit);
+        editTask = '';
+    }
+})
+
+function modifyFeature(evt) {
+    selectedFeatureOverlay.getSource().clear();
+    map.removeLayer(selectedFeatureOverlay);
+    var selectedFeature = map.forEachFeatureAtPixel(evt.pixel,
+        function (feature, layer) {
+            return feature;
+        });
+
+    if (selectedFeature) {
+        selectedFeatureOverlay.getSource().addFeature(selectedFeature);
+    }
+    var modifySource = selectedFeatureOverlay.getSource();
+    modifyInteraction = new ol.interaction.Modify({
+        source: modifySource
+    });
+    map.addInteraction(modifyInteraction);
+
+    var sourceEditGeoJson = editgeojson.getSource();
+    snap_edit = new ol.interaction.Snap({
+        source: sourceEditGeoJson
+    });
+    map.addInteraction(snap_edit);
+    modifyInteraction.on('modifyend', function (e) {
+        modifiedFeature = true;
+        featureAdd = true;
+        if (modifiedFeatureList.length > 0) {
+
+            for (var j = 0; j < modifiedFeatureList.length; j++) {
+                if (e.features.item(0)['id_'] == modifiedFeatureList[j]['id_']) {
+                    // modifiedFeatureList.splice(j, 1);
+                    featureAdd = false;
+                }
+            }
+        }
+        if (featureAdd) { modifiedFeatureList.push(e.features.item(0)); }
+    })
+    // }
+    // }
+}
+
+var clones = [];
+
+function saveEdits(editTaskName) {
+    clones = [];
+    for (var i = 0; i < modifiedFeatureList.length; i++) {
+        var feature = modifiedFeatureList[i];
+        var featureProperties = feature.getProperties();
+
+        delete featureProperties.boundedBy;
+        var clone = feature.clone();
+        clone.setId(feature.getId());
+
+        // if (editTaskName != 'insert') {clone.setGeometryName('the_geom');}
+        clones.push(clone)
+        // if (editTaskName == 'insert') { transactWFS('insert', clone); }
+    }
+
+    if (editTaskName == 'update') { transactWFS('update_batch', clones); }
+    if (editTaskName == 'insert') { transactWFS('insert_batch', clones); }
+
+}
+
+
+var formatWFS = new ol.format.WFS();
+
+
+var transactWFS = function (mode, f) {
+
+    var node;
+    var formatGML = new ol.format.GML({
+        // featureNS: 'http://argeomatica.com',
+        featureNS: geoserverWorkspace,
+        // featureType: 'playa_sample',
+        featureType: editLayer,
+        service: 'WFS',
+        version: '1.1.0',
+        request: 'GetFeature',
+        srsName: 'EPSG:3857'
+    });
+    switch (mode) {
+        case 'insert':
+            node = formatWFS.writeTransaction([f], null, null, formatGML);
+            break;
+        case 'insert_batch':
+            node = formatWFS.writeTransaction(f, null, null, formatGML);
+            break;
+        case 'update':
+            node = formatWFS.writeTransaction(null, [f], null, formatGML);
+            break;
+        case 'update_batch':
+            node = formatWFS.writeTransaction(null, f, null, formatGML);
+            break;
+        case 'delete':
+            node = formatWFS.writeTransaction(null, null, [f], formatGML);
+            break;
+        case 'delete_batch':
+            node = formatWFS.writeTransaction(null, null, [f], formatGML);
+            break;
+    }
+    var xs = new XMLSerializer();
+    var payload = xs.serializeToString(node);
+
+    payload = payload.split('feature:' + editLayer).join(editLayer);
+    if (editTask == 'insert') { payload = payload.split(geoserverWorkspace + ':geometry').join(geoserverWorkspace + ':geom'); }
+    if (editTask == 'update') { payload = payload.split('<Name>geometry</Name>').join('<Name>geom</Name>'); }
+    // payload = payload.replace(/feature:editLayer/g, editLayer);
+
+    $.ajax('http://localhost:8080/geoserver/wfs', {
+        type: 'POST',
+        dataType: 'xml',
+        processData: false,
+        contentType: 'text/xml',
+        data: payload.trim(),
+        success: function (data) {
+            // console.log('building updated');
+        },
+        error: function (e) {
+            var errorMsg = e ? (e.status + ' ' + e.statusText) : "";
+            alert('Error saving this feature to GeoServer.<br><br>'
+                + errorMsg);
+        }
+    }).done(function () {
+
+        editgeojson.getSource().refresh();
+
+    });
+};
+// end : Modify Feature Control
+
+// start : Delete feature control
+var deleteFeatureButton = document.createElement('button');
+deleteFeatureButton.innerHTML = '<img src="RSC/IMG/editErase.svg" alt="" class="myImg"></img>';
+deleteFeatureButton.className = 'myButton';
+deleteFeatureButton.id = 'deleteFeatureButton';
+deleteFeatureButton.title = 'Delete Feature';
+
+var deleteFeatureElement = document.createElement('div');
+deleteFeatureElement.className = 'myButtonDiv';
+deleteFeatureElement.id = 'deleteFeatureButtonDiv';
+deleteFeatureElement.appendChild(deleteFeatureButton);
+editingControlsDivElement.appendChild(deleteFeatureElement);
+
+var deleteFeatureFlag = false;
+deleteFeatureButton.addEventListener("click", () => {
+    deleteFeatureButton.classList.toggle('clicked');
+    deleteFeatureFlag = !deleteFeatureFlag;
+    document.getElementById("map").style.cursor = "default";
+    if (deleteFeatureFlag) {
+        modifiedFeatureList = [];
+        selectedFeatureOverlay.getSource().clear();
+        map.removeLayer(selectedFeatureOverlay);
+        editTask = 'delete';
+        map.on('click', selectFeatureToDelete);
+
+    } else {
+        if (modifiedFeatureList.length > 0) {
+            var answer = confirm('You have unsaved edits. Do you want to save edits?');
+            if (answer) {
+                saveEdits(editTask);
+                modifiedFeatureList = [];
+            } else {
+                // cancelEdits();
+                modifiedFeatureList = [];
+            }
+        }
+        map.un('click', selectFeatureToDelete);
+        selectedFeatureOverlay.getSource().clear();
+        map.removeLayer(selectedFeatureOverlay);
+        modifiedFeature = false;
+        // map.removeInteraction(modifyInteraction);
+        // map.removeInteraction(snap_edit);
+        editTask = '';
+    }
+})
+
+function selectFeatureToDelete(evt) {
+    clickSelectedFeatureOverlay.getSource().clear();
+    map.removeLayer(clickSelectedFeatureOverlay);
+    var selectedFeature = map.forEachFeatureAtPixel(evt.pixel,
+        function (feature, layer) {
+            return feature;
+        });
+
+    if (selectedFeature) {
+        // clickSelectedFeatureOverlay.getSource().addFeature(selectedFeature);
+        clones = [];
+        var answer = confirm('Do you want to delete selected feature?');
+        if (answer) {
+            var feature = selectedFeature;
+            var featureProperties = feature.getProperties();
+
+            delete featureProperties.boundedBy;
+            var clone = feature.clone();
+            clone.setId(feature.getId());
+
+            // clone.setGeometryName('the_geom');
+            clones.push(clone)
+            if (editTask == 'update') { transactWFS('update_batch', clones); }
+            if (editTask == 'insert') { transactWFS('insert_batch', clones); }
+            if (editTask == 'delete') { transactWFS('delete', clone); }
+        }
+
+    }
+}
+// end : Delete feature control
+
+// finally add all editing control to map
+var editingControl = new ol.control.Control({
+    element: editingControlsDivElement
+})
+map.addControl(editingControl);
+
+// start : auto locate functions
+
+var intervalAutolocate;
+var posCurrent;
+
+var geolocation = new ol.Geolocation({
+    trackingOptions: {
+        enableHighAccuracy: true,
+    },
+    tracking: true,
+    projection: mapView.getProjection()
+});
+
+var positionFeature = new ol.Feature();
+positionFeature.setStyle(
+    new ol.style.Style({
+        image: new ol.style.Circle({
+            radius: 6,
+            fill: new ol.style.Fill({
+                color: '#3399CC',
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#fff',
+                width: 2,
+            }),
+        }),
+    })
+);
+var accuracyFeature = new ol.Feature();
+
+var currentPositionLayer = new ol.layer.Vector({
+    map: map,
+    source: new ol.source.Vector({
+        features: [accuracyFeature, positionFeature],
+    }),
+});
+
+function startAutolocate() {
+    var coordinates = geolocation.getPosition();
+    positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
+    mapView.setCenter(coordinates);
+    mapView.setZoom(16);
+    accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
+    intervalAutolocate = setInterval(function () {
+        var coordinates = geolocation.getPosition();
+        var accuracy = geolocation.getAccuracyGeometry()
+        positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
+        map.getView().setCenter(coordinates);
+        mapView.setZoom(16);
+        accuracyFeature.setGeometry(accuracy);
+    }, 10000);
+}
+
+function stopAutolocate() {
+    clearInterval(intervalAutolocate);
+    positionFeature.setGeometry(null);
+    accuracyFeature.setGeometry(null);
+}
+// end : auto locate functions
+
+// start : settings Control
+var settingsButton = document.createElement('button');
+settingsButton.innerHTML = '<img src="RSC/IMG/settings.svg" alt="" class="myImg"></img>';
+settingsButton.className = 'myButton';
+settingsButton.id = 'settingButton';
+settingsButton.title = 'Settings';
+
+var settingElement = document.createElement('div');
+settingElement.className = 'myButtonDiv';
+settingElement.appendChild(settingsButton);
+toolbarDivElement.appendChild(settingElement);
+
+var settingFlag = false;
+settingsButton.addEventListener("click", () => {
+    settingsButton.classList.toggle('clicked');
+    settingFlag = !settingFlag;
+    document.getElementById("map").style.cursor = "default";
+    if (settingFlag) {
+        document.getElementById("settingsDiv").style.display = "block";
+        addMapLayerList('editingLayer');
+    } else {
+        document.getElementById("settingsDiv").style.display = "none";
+    }
+})
+// end : settings Control
+
 
 
 // start : live search function
@@ -1144,45 +1768,294 @@ function zoomToFeature(featureName, layerName, attributeName) {
 
 // end : live search function
 
-// Add a title control
-map.addControl(new ol.control.CanvasTitle({ 
-  title: 'my title', 
-  visible: false,
-  style: new ol.style.Style({ text: new ol.style.Text({ font: '20px "Lucida Grande",Verdana,Geneva,Lucida,Arial,Helvetica,sans-serif'}) })
-}));
+// start : onload functions
+$(function () {
 
-// Print control
-var printControl = new ol.control.PrintDialog({ 
-  // target: document.querySelector('.info'),
-  // targetDialog: map.getTargetElement() 
-  // save: false,
-  // copy: false,
-  // pdf: false
-});
-printControl.setSize('A4');
-map.addControl(printControl);
+    // render layerswitcher control
+    var toc = document.getElementById('layerSwitcherContent');
+    layerSwitcherControl = new ol.control.LayerSwitcher.renderPanel(map, toc, { reverse: true });
 
-/* On print > save image file */
-printControl.on(['print', 'error'], function(e) {
-  // Print success
-  if (e.image) {
-    if (e.pdf) {
-      // Export pdf using the print info
-      var pdf = new jsPDF({
-        orientation: e.print.orientation,
-        unit: e.print.unit,
-        format: e.print.size
-      });
-      pdf.addImage(e.image, 'JPEG', e.print.position[0], e.print.position[0], e.print.imageWidth, e.print.imageHeight);
-      pdf.save(e.print.legend ? 'legend.pdf' : 'map.pdf');
-    } else  {
-      // Save image as file
-      e.canvas.toBlob(function(blob) {
-        var name = (e.print.legend ? 'legend.' : 'map.')+e.imageType.replace('image/','');
-        saveAs(blob, name);
-      }, e.imageType, e.quality);
+    document.getElementById("selectLayer").onchange = function () {
+        var select = document.getElementById("selectAttribute");
+        while (select.options.length > 0) {
+            select.remove(0);
+        }
+        var value_layer = $(this).val();
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "http://" + serverPort + "/geoserver/wfs?service=WFS&request=DescribeFeatureType&version=1.1.0&typeName=" + value_layer,
+                dataType: "xml",
+                success: function (xml) {
+
+                    var select = $('#selectAttribute');
+                    //var title = $(xml).find('xsd\\:complexType').attr('name');
+                    //	alert(title);
+                    select.append("<option class='ddindent' value=''></option>");
+                    $(xml).find('xsd\\:sequence').each(function () {
+
+                        $(this).find('xsd\\:element').each(function () {
+                            var value = $(this).attr('name');
+                            //alert(value);
+                            var type = $(this).attr('type');
+                            //alert(type);
+                            if (value != 'geom' && value != 'the_geom') {
+                                select.append("<option class='ddindent' value='" + type + "'>" + value + "</option>");
+                            }
+                        });
+
+                    });
+                }
+            });
+        });
     }
-  } else {
-    console.warn('No canvas to export');
-  }
+    document.getElementById("selectAttribute").onchange = function () {
+        var operator = document.getElementById("selectOperator");
+        while (operator.options.length > 0) {
+            operator.remove(0);
+        }
+
+        var value_type = $(this).val();
+        // alert(value_type);
+        var value_attribute = $('#selectAttribute option:selected').text();
+        operator.options[0] = new Option('Select operator', "");
+
+        if (value_type == 'xsd:short' || value_type == 'xsd:int' || value_type == 'xsd:double') {
+            var operator1 = document.getElementById("selectOperator");
+            operator1.options[1] = new Option('Greater than', '>');
+            operator1.options[2] = new Option('Less than', '<');
+            operator1.options[3] = new Option('Equal to', '=');
+        }
+        else if (value_type == 'xsd:string') {
+            var operator1 = document.getElementById("selectOperator");
+            operator1.options[1] = new Option('Like', 'Like');
+            operator1.options[2] = new Option('Equal to', '=');
+        }
+    }
+
+    document.getElementById('attQryRun').onclick = function () {
+        map.set("isLoading", 'YES');
+
+        if (featureOverlay) {
+            featureOverlay.getSource().clear();
+            map.removeLayer(featureOverlay);
+        }
+
+        var layer = document.getElementById("selectLayer");
+        var attribute = document.getElementById("selectAttribute");
+        var operator = document.getElementById("selectOperator");
+        var txt = document.getElementById("enterValue");
+
+        if (layer.options.selectedIndex == 0) {
+            alert("Select Layer");
+        } else if (attribute.options.selectedIndex == -1) {
+            alert("Select Attribute");
+        } else if (operator.options.selectedIndex <= 0) {
+            alert("Select Operator");
+        } else if (txt.value.length <= 0) {
+            alert("Enter Value");
+        } else {
+            var value_layer = layer.options[layer.selectedIndex].value;
+            var value_attribute = attribute.options[attribute.selectedIndex].text;
+            var value_operator = operator.options[operator.selectedIndex].value;
+            var value_txt = txt.value;
+            if (value_operator == 'Like') {
+                value_txt = "%25" + value_txt + "%25";
+            }
+            else {
+                value_txt = value_txt;
+            }
+            var url = "http://" + serverPort + "/geoserver/" + geoserverWorkspace + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + value_layer + "&CQL_FILTER=" + value_attribute + "+" + value_operator + "+'" + value_txt + "'&outputFormat=application/json"
+            newaddGeoJsonToMap(url);
+            newpopulateQueryTable(url);
+            setTimeout(function () { newaddRowHandlers(url); }, 1000);
+            map.addLayer(clickSelectedFeatureOverlay);
+            map.set("isLoading", 'NO');
+        }
+    }
+
+    document.getElementById("srcCriteria").onchange = function () {
+        if (queryGeoJSON) {
+            queryGeoJSON.getSource().clear();
+            map.removeLayer(queryGeoJSON);
+        }
+
+        if (clickSelectedFeatureOverlay) {
+            clickSelectedFeatureOverlay.getSource().clear();
+            map.removeLayer(clickSelectedFeatureOverlay);
+        }
+        if (document.getElementById('spUserInput').classList.contains('clicked')) { document.getElementById('spUserInput').classList.toggle('clicked'); }
+    }
+
+    document.getElementById('spUserInput').onclick = function () {
+        document.getElementById('spUserInput').classList.toggle('clicked');
+        if (document.getElementById('spUserInput').classList.contains('clicked')) {
+            if (queryGeoJSON) {
+                queryGeoJSON.getSource().clear();
+                map.removeLayer(queryGeoJSON);
+            }
+
+            if (clickSelectedFeatureOverlay) {
+                clickSelectedFeatureOverlay.getSource().clear();
+                map.removeLayer(clickSelectedFeatureOverlay);
+            }
+            var srcCriteriaValue = document.getElementById('srcCriteria').value;
+            if (srcCriteriaValue == 'pointMarker') {
+                addInteractionForSpatialQuery('Point');
+
+            }
+            if (srcCriteriaValue == 'lineMarker') {
+                addInteractionForSpatialQuery('LineString');
+            }
+            if (srcCriteriaValue == 'polygonMarker') {
+                addInteractionForSpatialQuery('Polygon');
+            }
+        } else {
+            coordList = '';
+            markerFeature = undefined;
+            map.removeInteraction(draw);
+        }
+    }
+
+    document.getElementById('spQryRun').onclick = function () {
+
+        var layer = document.getElementById("buffSelectLayer");
+        var value_layer = layer.options[layer.selectedIndex].value;
+
+        var srcCriteria = document.getElementById("srcCriteria");
+        var value_src = srcCriteria.options[srcCriteria.selectedIndex].value;
+        var coordList = '';
+        var url;
+        var markerType = '';
+        if (markerFeature) {
+            if (value_src == 'pointMarker') {
+                coordList = markerFeature.getGeometry().getCoordinates()[0] + " " + markerFeature.getGeometry().getCoordinates()[1];
+                markerType = 'Point';
+            }
+            if (value_src == 'lineMarker') {
+                var coordArray = markerFeature.getGeometry().getCoordinates();
+
+                for (i = 0; i < coordArray.length; i++) {
+                    if (i == 0) {
+                        coordList = coordArray[i][0] + " " + coordArray[i][1];
+                    } else {
+                        coordList = coordList + ", " + coordArray[i][0] + " " + coordArray[i][1];
+                    }
+                }
+                markerType = 'LineString';
+            }
+            if (value_src == 'polygonMarker') {
+                var coordArray = markerFeature.getGeometry().getCoordinates()[0];
+                for (i = 0; i < coordArray.length; i++) {
+                    if (i == 0) {
+                        coordList = coordArray[i][0] + " " + coordArray[i][1];
+                    } else {
+                        coordList = coordList + ", " + coordArray[i][0] + " " + coordArray[i][1];
+                    }
+                }
+                coordList = "(" + coordList + ")";
+                markerType = 'Polygon';
+            }
+
+            var value_attribute = $('#qryType option:selected').text();
+            if (value_attribute == 'Within Distance of') {
+
+                var dist = document.getElementById("bufferDistance");
+                var value_dist = Number(dist.value);
+                // value_dist = value_dist / 111.325;
+
+                var distanceUnit = document.getElementById("distanceUnits");
+                var value_distanceUnit = distanceUnit.options[distanceUnit.selectedIndex].value;
+                url = "http://" + serverPort + "/geoserver/" + geoserverWorkspace + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + value_layer + "&CQL_FILTER=DWITHIN(geom," + markerType + "(" + coordList + ")," + value_dist + "," + value_distanceUnit + ")&outputFormat=application/json";
+
+
+            } else if (value_attribute == 'Intersecting') {
+                url = "http://" + serverPort + "/geoserver/" + geoserverWorkspace + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + value_layer + "&CQL_FILTER=INTERSECTS(geom," + markerType + "(" + coordList + "))&outputFormat=application/json";
+            } else if (value_attribute == 'Completely Within') {
+                url = "http://" + serverPort + "/geoserver/" + geoserverWorkspace + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" + value_layer + "&CQL_FILTER=WITHIN(geom," + markerType + "(" + coordList + "))&outputFormat=application/json";
+            }
+            newaddGeoJsonToMap(url);
+            coordList = '';
+            markerFeature = undefined;
+        }
+    }
+
+    var mapInteractions = map.getInteractions();
+    for (var x = 0; x < mapInteractions.getLength(); x++) {
+        var mapInteraction = mapInteractions.item(x);
+        if (mapInteraction instanceof ol.interaction.DoubleClickZoom) {
+            map.removeInteraction(mapInteraction);
+            break;
+        }
+    }
+
+    for (var x = 0; x < mapInteractions.getLength(); x++) {
+        var mapInteraction = mapInteractions.item(x);
+        if (mapInteraction instanceof ol.interaction.DragPan) {
+            map.removeInteraction(mapInteraction);
+            break;
+        }
+    }
+
+    document.getElementById("qryType").onchange = function () {
+        var value_attribute = $('#qryType option:selected').text();
+        var buffDivElement = document.getElementById("bufferDiv");
+
+        if (value_attribute == 'Within Distance of') {
+            buffDivElement.style.display = "block";
+        } else {
+            buffDivElement.style.display = "none";
+        }
+    }
+
+    document.getElementById('spQryClear').onclick = function () {
+        if (queryGeoJSON) {
+            queryGeoJSON.getSource().clear();
+            map.removeLayer(queryGeoJSON);
+        }
+
+        if (clickSelectedFeatureOverlay) {
+            clickSelectedFeatureOverlay.getSource().clear();
+            map.removeLayer(clickSelectedFeatureOverlay);
+        }
+        coordList = '';
+        markerFeature = undefined;
+    }
+
+    document.getElementById('attQryClear').onclick = function () {
+        if (queryGeoJSON) {
+            queryGeoJSON.getSource().clear();
+            map.removeLayer(queryGeoJSON);
+        }
+
+        if (clickSelectedFeatureOverlay) {
+            clickSelectedFeatureOverlay.getSource().clear();
+            map.removeLayer(clickSelectedFeatureOverlay);
+        }
+        coordList = '';
+        markerFeature = undefined;
+        document.getElementById("attListDiv").style.display = "none";
+    }
+
+    // live search input box behaviour
+    $("#inpt_search").on('focus', function () {
+        $(this).parent('label').addClass('active');
+    });
+
+    $("#inpt_search").on('blur', function () {
+        if ($(this).val().length == 0)
+            $(this).parent('label').removeClass('active');
+    });
+
+    // live location
+    $("#btnCrosshair").on("click", function (event) {
+        $("#btnCrosshair").toggleClass("clicked");
+        if ($("#btnCrosshair").hasClass("clicked")) {
+            startAutolocate();
+        } else {
+            stopAutolocate();
+        }
+    });
 });
+// end : onload functions
+
