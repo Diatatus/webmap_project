@@ -155,7 +155,7 @@ var bingMapsAerial = new ol.layer.Tile({
   var noneTile = new ol.layer.Tile({
     title: 'None',
     type: 'base',
-    visible: true
+    visible: false
 });
   
 var baseGroup = new ol.layer.Group({
@@ -1163,37 +1163,8 @@ startEditingButton.addEventListener("click", () => {
 // end : start editing Control
 
 
-// start : settings Control
-var settingsButton = document.createElement('button');
-settingsButton.innerHTML = '<img src="RSC/IMG/settings.svg" alt="" class="myImg"></img>';
-settingsButton.className = 'myButton';
-settingsButton.id = 'settingButton';
-settingsButton.title = 'Settings';
 
-var settingElement = document.createElement('div');
-settingElement.className = 'myButtonDiv';
-settingElement.appendChild(settingsButton);
-toolbarDivElement.appendChild(settingElement);
 
-var settingFlag = false;
-settingsButton.addEventListener("click", () => {
-    settingsButton.classList.toggle('clicked');
-    settingFlag = !settingFlag;
-    document.getElementById("map").style.cursor = "default";
-    if (settingFlag) {
-        document.getElementById("settingsDiv").style.display = "block";
-        addMapLayerList('editingLayer');
-    } else {
-        document.getElementById("settingsDiv").style.display = "none";
-    }
-})
-// end : settings Control
-
-// finally add all main control to map
-var allControl = new ol.control.Control({
-    element: toolbarDivElement
-})
-map.addControl(allControl);
 
 // start : add feature control
 
@@ -1643,6 +1614,12 @@ settingsButton.addEventListener("click", () => {
     }
 })
 // end : settings Control
+
+// finally add all main control to map
+var allControl = new ol.control.Control({
+    element: toolbarDivElement
+})
+map.addControl(allControl);
 
 
 

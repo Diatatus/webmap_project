@@ -14,7 +14,7 @@ main {
   display: grid;
   grid-template-areas:
     "head head head"
-    "wrapper wrapper wrapper"
+    "content content content"
     "foot foot foot";
   grid-template-rows: 60px auto 20px;
 }
@@ -24,7 +24,7 @@ header {
 }
 
 article {
-  grid-area: wrapper;
+  grid-area: content;
 
 }
 
@@ -46,50 +46,11 @@ footer {
 
   
 
-  .ol-zoom {
-    left: auto;
-    right: 0.5em;
-  }
-
-  .ol-rotate {
-    right: 3em;
-  }
-  .ol-touch .ol-rotate {
-    right: 3.5em;
-  }
-  /**/
-  .ol-overlay img {
-    max-width: 90%;
-  }
-  .data,
-  .data p {
-    margin:0;
-    text-align: center;
-    font-size:0.9em;
-  }
-  
-
-span{
-  width: 15px;
-}
-
-.info {
-  margin: 0;
-}
-.ol-attribution {
-  bottom: 0;
-  height: 1em;
-}
-
 .header {
   grid-area: header;
   font-size: 40px;
   height: 60px;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-.ol-popup {
-  display: none;
 }
 
 
@@ -618,47 +579,7 @@ margin: 0px auto 0px 20px;;
 /*** STYLES ***/
 /*** STYLES ***/
 
-.layer-switcher {
-  position: initial;
-}
 
-.leftside {
-  margin-top: 15px;
-  margin-left: 15px;
-}
-
-.labelexpanded {
-  font-size: 12px;
-}
-
-.labelexpanded>input {
-  display: none;
-}
-
-.labelexpanded input:checked+.radio-btns {
-  background-color: #253c6a;
-  color: #fff;
-}
-
-.radio-btns {
-  width: 57px;
-  height: 59px;
-  border-radius: 15px;
-  position: relative;
-  text-align: center;
-  padding: 15px 20px;
-  box-shadow: 0 1px #c3c3c3;
-  cursor: pointer;
-  background-color: #eaeaea;
-  float: left;
-  margin-right: 15px;
-  margin-top: 15px;
-}
-
-.radio-btns>img {
-  width: 30px;
-  height: 32px;
-}
 
 .search1 {
   width: 100%;
