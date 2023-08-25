@@ -1,3 +1,4 @@
+
 html,
 body {
   overflow: hidden;
@@ -8,6 +9,15 @@ body {
   font-size: small;
   overflow: hidden;
   font: 10pt 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+*:fullscreen, *:-webkit-full-screen, *:-moz-full-screen {
+  background-color: white !important;
+  z-index:1;
+}
+
+::backdrop {
+  z-index:0;  
+  background-color: white !important;
 }
 
 main {
@@ -62,7 +72,8 @@ footer {
     border-radius: 10px;
     border: 1px solid #cccccc;
     bottom: 12px;
-    left: -50px;
+    top: 10px;
+    left: 45px;
     min-width: 280px;
   }
   .ol-popup:after, .ol-popup:before {
@@ -242,6 +253,8 @@ background-color: rgba(22, 170, 35, 1);
   .layersDiv {
     position: absolute;
     display: none;
+    top: 10px;
+    left: 45px;
     margin: 65px auto auto 45px;
     width: 250px;
     /* height: 500px; */
@@ -329,6 +342,8 @@ margin: 1em 0.4em;
   .attListDiv {
     position: absolute;
     display: none;
+    top: 10px;
+    left: 45px;
     margin: 350px auto auto 350px;
     /* padding: 10px; */
     width: auto;
@@ -492,6 +507,8 @@ margin: 0px auto 0px 20px;;
   .settingsDiv {
     position: absolute;
     display: none;
+    top: 10px;
+    left: 45px;
     margin: 65px auto auto 45px;
     width: 250px;
     /* height: 250px; */

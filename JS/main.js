@@ -142,7 +142,7 @@ var bingMapsAerial = new ol.layer.Tile({
   });
   
   var bingMapsCanvasDark = new ol.layer.Tile({
-    title: "Canvas Dark",
+    title: "Toile sombre",
     visible: false,
     type: 'base',
     preload: Infinity,
@@ -161,13 +161,13 @@ var bingMapsAerial = new ol.layer.Tile({
 var baseGroup = new ol.layer.Group({
     title: 'Base Maps',
     fold: true,
-    layers: [bingMapsAerial,bingMapsAerialWithLabelsOnDemand,bingMapsRoadOnDemand,bingMapsCanvasDark, noneTile]
+    layers: [noneTile,bingMapsCanvasDark,bingMapsRoadOnDemand,bingMapsAerialWithLabelsOnDemand,bingMapsAerial]
 });
 
 
 // WMS layer
 var Cameroun_Regions = new ol.layer.Image({
-  title: 'Cameroun_Regions',
+  title: 'Regions',
   source: new ol.source.ImageWMS({
       url:'http://localhost:8080/geoserver/beesig_w/wms',
       params: {'LAYERS': 'beesig_w:region', 'TILED': true},
@@ -180,7 +180,7 @@ var Cameroun_Regions = new ol.layer.Image({
 
 
 var Cameroun_Departements = new ol.layer.Image({
-  title: 'Cameroun_Departements',
+  title: 'Departements',
   source: new ol.source.ImageWMS({
       url:'http://localhost:8080/geoserver/beesig_w/wms',
       params: {'LAYERS': 'beesig_w:departement', 'TILED': true},
@@ -193,7 +193,7 @@ var Cameroun_Departements = new ol.layer.Image({
 
 
 var Cameroun_Communes = new ol.layer.Image({
-  title: 'Cameroun_Regions',
+  title: 'Communes',
   source: new ol.source.ImageWMS({
       url:'http://localhost:8080/geoserver/beesig_w/wms',
       params: {'LAYERS': 'beesig_w:commune', 'TILED': true},
@@ -229,6 +229,13 @@ for (y = 0; y < map.getLayers().getLength(); y++) {
     }
 
 }
+
+// ProgressBar
+var progress = new ol.control.ProgressBar({
+    // target: $('.options').get(0)
+    label: 'Chargement...',
+  });
+  map.addControl(progress);
 
 
 
