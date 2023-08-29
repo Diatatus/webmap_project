@@ -103,7 +103,6 @@ var mapView =  new ol.View({
 var map = new ol.Map({
   target: 'map',
   view: mapView,
-  controls : []
 });
 
 //Bing map Tile
@@ -203,12 +202,24 @@ var Cameroun_Communes = new ol.layer.Image({
   
 });
 
+var Densite_pop = new ol.layer.Image({
+    title: 'Densité de Population',
+    source: new ol.source.ImageWMS({
+        url:'http://localhost:8080/geoserver/beesig_w/wms',
+        params: {'LAYERS': 'beesig_w:ZonalSt_comm1', 'TILED': true},
+        serverType: 'geoserver',
+        visible: true,
+    }),
+    
+  });
+
 
 var overlayGroup = new ol.layer.Group({
   title: 'Limites Administratives',
   fold: true,
-  layers: [Cameroun_Regions, Cameroun_Departements, Cameroun_Communes]
+  layers: [Cameroun_Regions, Cameroun_Departements, Cameroun_Communes, Densite_pop]
 })
+
 
 map.addLayer(baseGroup);
 map.addLayer(overlayGroup);
@@ -230,40 +241,32 @@ for (y = 0; y < map.getLayers().getLength(); y++) {
 
 }
 
+
+
 // ProgressBar
 var progress = new ol.control.ProgressBar({
-    // target: $('.options').get(0)
+    target: $('.options').get(0),
     label: 'Chargement...',
+    
   });
   map.addControl(progress);
 
-
+  // Scale Line
+  var ctrl = new ol.control.Scale({	});
+  map.addControl(ctrl);
+  map.addControl(new ol.control.ScaleLine());
+  
+  function setDiagonal(val) {
+    var res = Math.sqrt(window.screen.width*window.screen.width+window.screen.height*window.screen.height)/val; 
+    res = Math.round(res);
+    $('#ppi').val(res);
+    ctrl.set('ppi', res); 
+    ctrl.setScale()
+  }
 
 var toolbarDivElement = document.createElement('div');
 toolbarDivElement.className = 'toolbarDiv';
 
-// start : home Control
-var homeButton = document.createElement('button');
-homeButton.innerHTML = '<img src="RSC/IMG/home.svg" alt="" class="myImg"></img>';
-homeButton.className = 'myButton';
-homeButton.title = 'Home';
-
-
-var homeElement = document.createElement('div');
-homeElement.className = 'homeButtonDiv';
-homeElement.appendChild(homeButton);
-toolbarDivElement.appendChild(homeElement);
-
-homeButton.addEventListener("click", () => {
-    location.href = "index.js";
-})
-
-// map.addControl(homeControl);
-// end : home Control
-
-
-
-// Control
 // start : full screen Control
 var fsButton = document.createElement('button');
 fsButton.innerHTML = '<img src="RSC/IMG/fullscreen.svg" alt="" class="myImg"></img>';
@@ -342,75 +345,6 @@ panButton.addEventListener("click", () => {
 })
 // end : pan Control
 
-// start : zoomIn Control
-
-var zoomInInteraction = new ol.interaction.DragBox();
-
-zoomInInteraction.on('boxend', function () {
-    var zoomInExtent = zoomInInteraction.getGeometry().getExtent();
-    map.getView().fit(zoomInExtent);
-});
-
-var ziButton = document.createElement('button');
-ziButton.innerHTML = '<img src="RSC/IMG/zoomIn.svg" alt="" class="myImg"></img>';
-ziButton.className = 'myButton';
-ziButton.id = 'ziButton';
-ziButton.title = 'Zoom In';
-
-var ziElement = document.createElement('div');
-ziElement.className = 'myButtonDiv';
-ziElement.appendChild(ziButton);
-toolbarDivElement.appendChild(ziElement);
-
-var zoomInFlag = false;
-ziButton.addEventListener("click", () => {
-    ziButton.classList.toggle('clicked');
-    zoomInFlag = !zoomInFlag;
-    if (zoomInFlag) {
-        document.getElementById("map").style.cursor = "zoom-in";
-        map.addInteraction(zoomInInteraction);
-    } else {
-        map.removeInteraction(zoomInInteraction);
-        document.getElementById("map").style.cursor = "default";
-    }
-})
-
-// end : zoomIn Control
-
-// start : zoomOut Control
-var zoomOutInteraction = new ol.interaction.DragBox();
-
-zoomOutInteraction.on('boxend', function () {
-    var zoomOutExtent = zoomOutInteraction.getGeometry().getExtent();
-    map.getView().setCenter(ol.extent.getCenter(zoomOutExtent));
-
-    mapView.setZoom(mapView.getZoom() - 1)
-});
-
-var zoButton = document.createElement('button');
-zoButton.innerHTML = '<img src="RSC/IMG/zoomOut.png" alt="" class="myImg"></img>';
-zoButton.className = 'myButton';
-zoButton.id = 'zoButton';
-zoButton.title = 'Zoom Out';
-
-var zoElement = document.createElement('div');
-zoElement.className = 'myButtonDiv';
-zoElement.appendChild(zoButton);
-toolbarDivElement.appendChild(zoElement);
-
-var zoomOutFlag = false;
-zoButton.addEventListener("click", () => {
-    zoButton.classList.toggle('clicked');
-    zoomOutFlag = !zoomOutFlag;
-    if (zoomOutFlag) {
-        document.getElementById("map").style.cursor = "zoom-out";
-        map.addInteraction(zoomOutInteraction);
-    } else {
-        map.removeInteraction(zoomOutInteraction);
-        document.getElementById("map").style.cursor = "default";
-    }
-})
-// end : zoomOut Control
 
 
 
@@ -1088,539 +1022,8 @@ function addMapLayerList_spQry() {
 };
 // end : spatial query
 
-// start : start editing Control
-var editgeojson;
-var editLayer;
-var modifiedFeatureList = [];
-var editTask;
-var editTaskName;
-var modifiedFeature = false;
-var modifyInteraction;
-var featureAdd;
-var snap_edit;
-var selectedFeatureOverlay = new ol.layer.Vector({
-    title: 'Selected Feature',
-    source: new ol.source.Vector(),
-    map: map,
-    style: highlightStyle
-});
 
-var startEditingButton = document.createElement('button');
-startEditingButton.innerHTML = '<img src="RSC/IMG/edit.png" alt="" class="myImg"></img>';
-startEditingButton.className = 'myButton';
-startEditingButton.id = 'startEditingButton';
-startEditingButton.title = 'Start Editing';
 
-var startEditingElement = document.createElement('div');
-startEditingElement.className = 'myButtonDiv';
-startEditingElement.appendChild(startEditingButton);
-toolbarDivElement.appendChild(startEditingElement);
-
-var startEditingFlag = false;
-startEditingButton.addEventListener("click", () => {
-    startEditingButton.classList.toggle('clicked');
-    startEditingFlag = !startEditingFlag;
-    document.getElementById("map").style.cursor = "default";
-    if (startEditingFlag) {
-        document.getElementById("editingControlsDiv").style.display = "block";
-        editLayer = document.getElementById('editingLayer').value;
-        var style = new ol.style.Style({
-            fill: new ol.style.Fill({
-                color: 'rgba(0, 0, 0, 0)'
-            }),
-            stroke: new ol.style.Stroke({
-                color: '#00FFFF',
-                width: 1
-            }),
-            image: new ol.style.Circle({
-                radius: 7,
-                fill: new ol.style.Fill({
-                    color: '#00FFFF'
-                })
-            })
-        });
-
-        if (editgeojson) {
-            editgeojson.getSource().clear();
-            map.removeLayer(editgeojson);
-        }
-
-        editgeojson = new ol.layer.Vector({
-            title: "Edit Layer",
-            source: new ol.source.Vector({
-                format: new ol.format.GeoJSON(),
-                url: function (extent) {
-                    return 'http://' + serverPort + '/geoserver/' + geoserverWorkspace + '/ows?service=WFS&' +
-                        'version=1.0.0&request=GetFeature&typeName=' + editLayer + '&' +
-                        'outputFormat=application/json&srsname=EPSG:3857&' +
-                        'bbox=' + extent.join(',') + ',EPSG:4326';
-                },
-                strategy: ol.loadingstrategy.bbox
-            }),
-            style: style,
-        });
-        map.addLayer(editgeojson);
-
-    } else {
-        document.getElementById("editingControlsDiv").style.display = "none";
-        editgeojson.getSource().clear();
-        map.removeLayer(editgeojson);
-    }
-})
-// end : start editing Control
-
-
-
-
-
-// start : add feature control
-
-var editingControlsDivElement = document.getElementById('editingControlsDiv');
-
-var addFeatureButton = document.createElement('button');
-addFeatureButton.innerHTML = '<img src="RSC/IMG/editAdd.png" alt="" class="myImg"></img>';
-addFeatureButton.className = 'myButton';
-addFeatureButton.id = 'addFeatureButton';
-addFeatureButton.title = 'Add Feature';
-
-var addFeatureElement = document.createElement('div');
-addFeatureElement.className = 'myButtonDiv';
-addFeatureElement.id = 'addFeatureButtonDiv';
-addFeatureElement.appendChild(addFeatureButton);
-editingControlsDivElement.appendChild(addFeatureElement);
-
-var addFeatureFlag = false;
-addFeatureButton.addEventListener("click", () => {
-    addFeatureButton.classList.toggle('clicked');
-    addFeatureFlag = !addFeatureFlag;
-    document.getElementById("map").style.cursor = "default";
-    if (addFeatureFlag) {
-        if (modifiedFeatureList) {
-            if (modifiedFeatureList.length > 0) {
-                var answer = confirm('Save edits?');
-                if (answer) {
-                    saveEdits(editTask);
-                    modifiedFeatureList = [];
-                } else {
-                    // cancelEdits();
-                    modifiedFeatureList = [];
-                }
-
-            }
-        }
-        editTask = 'insert';
-        addFeature();
-    } else {
-        if (modifiedFeatureList.length > 0) {
-            var answer = confirm('You have unsaved edits. Do you want to save edits?');
-            if (answer) {
-                saveEdits(editTask);
-                modifiedFeatureList = [];
-            } else {
-                // cancelEdits();
-                modifiedFeatureList = [];
-            }
-        }
-
-        map.un('click', modifyFeature);
-        selectedFeatureOverlay.getSource().clear();
-        map.removeLayer(selectedFeatureOverlay);
-        modifiedFeature = false;
-        map.removeInteraction(modifyInteraction);
-        map.removeInteraction(snap_edit);
-        editTask = '';
-
-
-        if (modifyInteraction) {
-            map.removeInteraction(modifyInteraction);
-        }
-        if (snap_edit) {
-            map.removeInteraction(snap_edit);
-        }
-        if (drawInteraction) {
-            map.removeInteraction(drawInteraction);
-        }
-    }
-})
-
-function addFeature(evt) {
-    if (clickSelectedFeatureOverlay) {
-        clickSelectedFeatureOverlay.getSource().clear();
-        map.removeLayer(clickSelectedFeatureOverlay);
-    }
-
-    if (modifyInteraction) {
-        map.removeInteraction(modifyInteraction);
-    }
-    if (snap_edit) {
-        map.removeInteraction(snap_edit);
-    }
-
-    var interactionType;
-    source_mod = editgeojson.getSource();
-    drawInteraction = new ol.interaction.Draw({
-        source: editgeojson.getSource(),
-        type: editgeojson.getSource().getFeatures()[0].getGeometry().getType(),
-        style: interactionStyle
-    });
-    map.addInteraction(drawInteraction);
-    snap_edit = new ol.interaction.Snap({
-        source: editgeojson.getSource()
-    });
-    map.addInteraction(snap_edit);
-
-    drawInteraction.on('drawend', function (e) {
-        var feature = e.feature;
-        feature.set('geometry', feature.getGeometry());
-        modifiedFeatureList.push(feature);
-    })
-
-}
-
-// end : add feature control
-
-// start : Modify Feature Control
-var modifyFeatureButton = document.createElement('button');
-modifyFeatureButton.innerHTML = '<img src="RSC/IMG/editModify.svg" alt="" class="myImg"></img>';
-modifyFeatureButton.className = 'myButton';
-modifyFeatureButton.id = 'modifyFeatureButton';
-modifyFeatureButton.title = 'Modify Feature';
-
-var modifyFeatureElement = document.createElement('div');
-modifyFeatureElement.className = 'myButtonDiv';
-modifyFeatureElement.id = 'modifyFeatureButtonDiv';
-modifyFeatureElement.appendChild(modifyFeatureButton);
-editingControlsDivElement.appendChild(modifyFeatureElement);
-
-var modifyFeatureFlag = false;
-modifyFeatureButton.addEventListener("click", () => {
-    modifyFeatureButton.classList.toggle('clicked');
-    modifyFeatureFlag = !modifyFeatureFlag;
-    document.getElementById("map").style.cursor = "default";
-    if (modifyFeatureFlag) {
-        modifiedFeatureList = [];
-        selectedFeatureOverlay.getSource().clear();
-        map.removeLayer(selectedFeatureOverlay);
-        map.on('click', modifyFeature);
-        editTask = 'update';
-    } else {
-        if (modifiedFeatureList.length > 0) {
-            var answer = confirm('Save edits?');
-            if (answer) {
-                saveEdits(editTask);
-                modifiedFeatureList = [];
-            } else {
-                // cancelEdits();
-                modifiedFeatureList = [];
-            }
-        }
-        map.un('click', modifyFeature);
-        selectedFeatureOverlay.getSource().clear();
-        map.removeLayer(selectedFeatureOverlay);
-        modifiedFeature = false;
-        map.removeInteraction(modifyInteraction);
-        map.removeInteraction(snap_edit);
-        editTask = '';
-    }
-})
-
-function modifyFeature(evt) {
-    selectedFeatureOverlay.getSource().clear();
-    map.removeLayer(selectedFeatureOverlay);
-    var selectedFeature = map.forEachFeatureAtPixel(evt.pixel,
-        function (feature, layer) {
-            return feature;
-        });
-
-    if (selectedFeature) {
-        selectedFeatureOverlay.getSource().addFeature(selectedFeature);
-    }
-    var modifySource = selectedFeatureOverlay.getSource();
-    modifyInteraction = new ol.interaction.Modify({
-        source: modifySource
-    });
-    map.addInteraction(modifyInteraction);
-
-    var sourceEditGeoJson = editgeojson.getSource();
-    snap_edit = new ol.interaction.Snap({
-        source: sourceEditGeoJson
-    });
-    map.addInteraction(snap_edit);
-    modifyInteraction.on('modifyend', function (e) {
-        modifiedFeature = true;
-        featureAdd = true;
-        if (modifiedFeatureList.length > 0) {
-
-            for (var j = 0; j < modifiedFeatureList.length; j++) {
-                if (e.features.item(0)['id_'] == modifiedFeatureList[j]['id_']) {
-                    // modifiedFeatureList.splice(j, 1);
-                    featureAdd = false;
-                }
-            }
-        }
-        if (featureAdd) { modifiedFeatureList.push(e.features.item(0)); }
-    })
-    // }
-    // }
-}
-
-var clones = [];
-
-function saveEdits(editTaskName) {
-    clones = [];
-    for (var i = 0; i < modifiedFeatureList.length; i++) {
-        var feature = modifiedFeatureList[i];
-        var featureProperties = feature.getProperties();
-
-        delete featureProperties.boundedBy;
-        var clone = feature.clone();
-        clone.setId(feature.getId());
-
-        // if (editTaskName != 'insert') {clone.setGeometryName('the_geom');}
-        clones.push(clone)
-        // if (editTaskName == 'insert') { transactWFS('insert', clone); }
-    }
-
-    if (editTaskName == 'update') { transactWFS('update_batch', clones); }
-    if (editTaskName == 'insert') { transactWFS('insert_batch', clones); }
-
-}
-
-
-var formatWFS = new ol.format.WFS();
-
-
-var transactWFS = function (mode, f) {
-
-    var node;
-    var formatGML = new ol.format.GML({
-        // featureNS: 'http://argeomatica.com',
-        featureNS: geoserverWorkspace,
-        // featureType: 'playa_sample',
-        featureType: editLayer,
-        service: 'WFS',
-        version: '1.1.0',
-        request: 'GetFeature',
-        srsName: 'EPSG:3857'
-    });
-    switch (mode) {
-        case 'insert':
-            node = formatWFS.writeTransaction([f], null, null, formatGML);
-            break;
-        case 'insert_batch':
-            node = formatWFS.writeTransaction(f, null, null, formatGML);
-            break;
-        case 'update':
-            node = formatWFS.writeTransaction(null, [f], null, formatGML);
-            break;
-        case 'update_batch':
-            node = formatWFS.writeTransaction(null, f, null, formatGML);
-            break;
-        case 'delete':
-            node = formatWFS.writeTransaction(null, null, [f], formatGML);
-            break;
-        case 'delete_batch':
-            node = formatWFS.writeTransaction(null, null, [f], formatGML);
-            break;
-    }
-    var xs = new XMLSerializer();
-    var payload = xs.serializeToString(node);
-
-    payload = payload.split('feature:' + editLayer).join(editLayer);
-    if (editTask == 'insert') { payload = payload.split(geoserverWorkspace + ':geometry').join(geoserverWorkspace + ':geom'); }
-    if (editTask == 'update') { payload = payload.split('<Name>geometry</Name>').join('<Name>geom</Name>'); }
-    // payload = payload.replace(/feature:editLayer/g, editLayer);
-
-    $.ajax('http://localhost:8080/geoserver/wfs', {
-        type: 'POST',
-        dataType: 'xml',
-        processData: false,
-        contentType: 'text/xml',
-        data: payload.trim(),
-        success: function (data) {
-            // console.log('building updated');
-        },
-        error: function (e) {
-            var errorMsg = e ? (e.status + ' ' + e.statusText) : "";
-            alert('Error saving this feature to GeoServer.<br><br>'
-                + errorMsg);
-        }
-    }).done(function () {
-
-        editgeojson.getSource().refresh();
-
-    });
-};
-// end : Modify Feature Control
-
-// start : Delete feature control
-var deleteFeatureButton = document.createElement('button');
-deleteFeatureButton.innerHTML = '<img src="RSC/IMG/editErase.svg" alt="" class="myImg"></img>';
-deleteFeatureButton.className = 'myButton';
-deleteFeatureButton.id = 'deleteFeatureButton';
-deleteFeatureButton.title = 'Delete Feature';
-
-var deleteFeatureElement = document.createElement('div');
-deleteFeatureElement.className = 'myButtonDiv';
-deleteFeatureElement.id = 'deleteFeatureButtonDiv';
-deleteFeatureElement.appendChild(deleteFeatureButton);
-editingControlsDivElement.appendChild(deleteFeatureElement);
-
-var deleteFeatureFlag = false;
-deleteFeatureButton.addEventListener("click", () => {
-    deleteFeatureButton.classList.toggle('clicked');
-    deleteFeatureFlag = !deleteFeatureFlag;
-    document.getElementById("map").style.cursor = "default";
-    if (deleteFeatureFlag) {
-        modifiedFeatureList = [];
-        selectedFeatureOverlay.getSource().clear();
-        map.removeLayer(selectedFeatureOverlay);
-        editTask = 'delete';
-        map.on('click', selectFeatureToDelete);
-
-    } else {
-        if (modifiedFeatureList.length > 0) {
-            var answer = confirm('You have unsaved edits. Do you want to save edits?');
-            if (answer) {
-                saveEdits(editTask);
-                modifiedFeatureList = [];
-            } else {
-                // cancelEdits();
-                modifiedFeatureList = [];
-            }
-        }
-        map.un('click', selectFeatureToDelete);
-        selectedFeatureOverlay.getSource().clear();
-        map.removeLayer(selectedFeatureOverlay);
-        modifiedFeature = false;
-        // map.removeInteraction(modifyInteraction);
-        // map.removeInteraction(snap_edit);
-        editTask = '';
-    }
-})
-
-function selectFeatureToDelete(evt) {
-    clickSelectedFeatureOverlay.getSource().clear();
-    map.removeLayer(clickSelectedFeatureOverlay);
-    var selectedFeature = map.forEachFeatureAtPixel(evt.pixel,
-        function (feature, layer) {
-            return feature;
-        });
-
-    if (selectedFeature) {
-        // clickSelectedFeatureOverlay.getSource().addFeature(selectedFeature);
-        clones = [];
-        var answer = confirm('Do you want to delete selected feature?');
-        if (answer) {
-            var feature = selectedFeature;
-            var featureProperties = feature.getProperties();
-
-            delete featureProperties.boundedBy;
-            var clone = feature.clone();
-            clone.setId(feature.getId());
-
-            // clone.setGeometryName('the_geom');
-            clones.push(clone)
-            if (editTask == 'update') { transactWFS('update_batch', clones); }
-            if (editTask == 'insert') { transactWFS('insert_batch', clones); }
-            if (editTask == 'delete') { transactWFS('delete', clone); }
-        }
-
-    }
-}
-// end : Delete feature control
-
-// finally add all editing control to map
-var editingControl = new ol.control.Control({
-    element: editingControlsDivElement
-})
-map.addControl(editingControl);
-
-// start : auto locate functions
-
-var intervalAutolocate;
-var posCurrent;
-
-var geolocation = new ol.Geolocation({
-    trackingOptions: {
-        enableHighAccuracy: true,
-    },
-    tracking: true,
-    projection: mapView.getProjection()
-});
-
-var positionFeature = new ol.Feature();
-positionFeature.setStyle(
-    new ol.style.Style({
-        image: new ol.style.Circle({
-            radius: 6,
-            fill: new ol.style.Fill({
-                color: '#3399CC',
-            }),
-            stroke: new ol.style.Stroke({
-                color: '#fff',
-                width: 2,
-            }),
-        }),
-    })
-);
-var accuracyFeature = new ol.Feature();
-
-var currentPositionLayer = new ol.layer.Vector({
-    map: map,
-    source: new ol.source.Vector({
-        features: [accuracyFeature, positionFeature],
-    }),
-});
-
-function startAutolocate() {
-    var coordinates = geolocation.getPosition();
-    positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
-    mapView.setCenter(coordinates);
-    mapView.setZoom(16);
-    accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
-    intervalAutolocate = setInterval(function () {
-        var coordinates = geolocation.getPosition();
-        var accuracy = geolocation.getAccuracyGeometry()
-        positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
-        map.getView().setCenter(coordinates);
-        mapView.setZoom(16);
-        accuracyFeature.setGeometry(accuracy);
-    }, 10000);
-}
-
-function stopAutolocate() {
-    clearInterval(intervalAutolocate);
-    positionFeature.setGeometry(null);
-    accuracyFeature.setGeometry(null);
-}
-// end : auto locate functions
-
-// start : settings Control
-var settingsButton = document.createElement('button');
-settingsButton.innerHTML = '<img src="RSC/IMG/settings.svg" alt="" class="myImg"></img>';
-settingsButton.className = 'myButton';
-settingsButton.id = 'settingButton';
-settingsButton.title = 'Settings';
-
-var settingElement = document.createElement('div');
-settingElement.className = 'myButtonDiv';
-settingElement.appendChild(settingsButton);
-toolbarDivElement.appendChild(settingElement);
-
-var settingFlag = false;
-settingsButton.addEventListener("click", () => {
-    settingsButton.classList.toggle('clicked');
-    settingFlag = !settingFlag;
-    document.getElementById("map").style.cursor = "default";
-    if (settingFlag) {
-        document.getElementById("settingsDiv").style.display = "block";
-        addMapLayerList('editingLayer');
-    } else {
-        document.getElementById("settingsDiv").style.display = "none";
-    }
-})
-// end : settings Control
 
 // finally add all main control to map
 var allControl = new ol.control.Control({
