@@ -24,12 +24,12 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- jQuery -->
-    <script type="text/javascript" src="JS/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
     
-    <!-- https://github.com/MrRio/jsPDF -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
-    <!-- filesaver-js -->
-    <script type="text/javascript" src="https://cdn.rawgit.com/eligrey/FileSaver.js/aa9f4e0e/FileSaver.min.js"></script>
+  <!-- https://github.com/MrRio/jsPDF -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+  <!-- filesaver-js -->
+  <script type="text/javascript" src="https://cdn.rawgit.com/eligrey/FileSaver.js/aa9f4e0e/FileSaver.min.js"></script>
 
     <!-- Bingmap -->
     <script type='text/javascript'
@@ -46,8 +46,9 @@
     <link rel="stylesheet" href="CSS/ol-layerswitcher.css" />
     <script type="text/javascript" src="JS/ol-layerswitcher.js"></script>
     
+    
     <!-- Pointer events polyfill for old browsers, see https://caniuse.com/#feat=pointer -->
-    <script src="https://unpkg.com/elm-pep@1.0.6/dist/elm-pep.js"></script>
+    <script src="https://unpkg.com/elm-pep"></script>
 
     <link rel="stylesheet" href="CSS/style.css">
 
@@ -70,7 +71,7 @@
             <div class="wrap">
                 <div class="search1" for="inpt_search">
                     <input id="inpt_search" type="text" class="searchTerm"
-                        placeholder="Chercher un lieu, une adresse, une donnée...">
+                        placeholder="Chercher un lieu, une adresse...">
                     <button type="submit" class="searchButton">
                         <i class="fa fa-search"></i>
                     </button>
@@ -82,20 +83,16 @@
 
 
             <div id="map" class="map">
-                <button id="btnCrosshair" title="Live Location">
-                    <i class="fa fa-crosshairs fa-2x"></i>
-                </button>
             </div>
-            
-            <div id="popup" class="ol-popup">
-                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-                <div id="popup-content"></div>
-            </div>
+ 
+    
             <div id="layersDiv" class="layersDiv">
                 <div class="headerDiv" id="headerDiv">
                     <label for="">Couches et données thématique</label>
                 </div>
                 <div id="layerSwitcherContent" class="layer-switcher"></div>
+         
+                </div>
             </div>
             <!-- <div class="toggleAttQueryDiv" id="toggleAttQueryDiv"></div> -->
             <div class="attQueryDiv" id="attQueryDiv">
@@ -189,6 +186,7 @@
     </main>
 
     <script type="text/javascript" src="JS/main.js"></script>
+    
 </body>
 
 </html>
