@@ -1698,6 +1698,7 @@ var popup = new ol.Overlay.PopupFeature({
         'nom': { title: 'Région' },
         'nombre_departements': { title: 'Départements' },
         'nombre_communes': { title: 'Communes' },
+        'communes_arrondissement': { title: 'Communauté Urbaine' },
         'nombre_population': { title: 'Population' },
         'superficie': { title: 'Superficie' },
         // with prefix and suffix
